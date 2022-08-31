@@ -7,36 +7,37 @@
     <title>Pricemap</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    
+
+
     <meta property="og:site_name" content="Pricemap">
     <meta property="og:title" content="Observatorio de precios">
     <meta property="og:image" content="../static/img/logo/pricemap_logo_v1.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:description" content="Encuentra y compara el precio del mismo producto en diferentes puntos de venta.">
+    <meta property="og:description"
+        content="Encuentra y compara el precio del mismo producto en diferentes puntos de venta.">
     <meta name="twitter:card" content="summary_large_image">
 
     <link rel="manifest" href="site.webmanifest">
- 
-    <link rel="shortcut icon" type="image/x-icon" href="../static/img/logo/favicon_pricemap.png">
-   
-    
-    <!-- CSS here -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/flaticon.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/slicknav.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome-all.min.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/themify-icons.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/slick.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css')}}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
 
-        <!--CREADO RECIENTEMENTE-->
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashstyle.css')}}">
+    <link rel="shortcut icon" type="image/x-icon" href="../static/img/logo/favicon_pricemap.png">
+
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flaticon.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/slicknav.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome-all.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themify-icons.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/slick.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+
+    <!--CREADO RECIENTEMENTE-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashstyle.css')}}">
 
     <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -47,7 +48,7 @@
 <body>
     <header>
         <!-- Header Start -->
-       <div class="header-area header-transparrent">
+        <div class="header-area header-transparrent">
             <div class="main-header header-sticky">
                 <div class="container">
                     <div class="row align-items-center" style="padding-top: 15px;">
@@ -58,14 +59,14 @@
                             </div>
                         </div>
                         <div class="col-xl-10 col-lg-10 col-md-10">
-                            <!-- Main-menu --> 
+                            <!-- Main-menu -->
 
-                            <!---->                          
+                            <!---->
                             <div class="main-menu f-right d-none d-lg-block">
                                 <nav>
-                                    <ul id="navigation">                                                                                                
-                    
-                                        <li><a href="#observatorio">Comparación</a></li>                                    
+                                    <ul id="navigation">
+
+                                        <li><a href="#observatorio">Comparación</a></li>
                                         <li><a href="#contact">Contacto</a></li>
                                         <li><a href="https://pixmap.io/" target="_blank">Pixmap</a></li>
 
@@ -77,11 +78,11 @@
                                                 <li><a href="elements.html">Element</a></li>
                                             </ul>
                                         </li> 
-                                        -->                                       
+                                        -->
 
                                     </ul>
                                 </nav>
-                            </div>                          
+                            </div>
 
                         </div>
                         <!-- Mobile Menu -->
@@ -91,19 +92,40 @@
                     </div>
                 </div>
             </div>
-       </div>
+        </div>
         <!-- Header End -->
     </header>
 
     <main>
 
-        <iframe src="{{ url_for('static', filename='img/fig1.html')}}" frameborder="0" scrolling="no" width="500px" height="400px"></iframe>
+        <input type="radio" id="seven_days" name="days" value="7">
+        <label for="seven_days">Siete dias</label><br>
 
-        <p>Minimo: {{mi}}</p>
-        <p>Maximo: {{ma}}</p>
-        <p>Promedio: {{mean}}</p>
-        <p>Variacion desde inicio: {{var_t}}%</p>
-        <p>Variacion ultimas 24h: {{var_d}}%</p>
+        <input type="radio" id="fourteen_weeks" name="days" value="14">
+        <label for="fourteen_weeks">Catorce dias</label><br>
+
+        <input type="radio" id="one_month" name="days" value="30">
+        <label for="one_month">Un mes</label>
+
+        <iframe src="{{ url_for('static', filename='img/fig2.html')}}" frameborder="0" scrolling="no" width="500px"
+            height="400px"></iframe>
+
+        <p>El precio minimo está en: {{mins[0]}} con {{mins[1]}}</p>
+        <p>El precio maximo está en: {{maxs[0]}} con {{maxs[1]}}</p>
+
+        <h4>VARIACION</h4>
+        {% set count = namespace(value=0) %}
+        {% for i in variacion %}
+
+        {%if i is not none and i != "nan"%}
+        <p>{{retailers[count.value]}}: {{i}}%</p>
+        {%else%}
+        <p>{{retailers[count.value]}}: No hay registro de datos</p>
+        {%endif%}
+
+        {% set count.value = count.value + 1 %}
+
+        {%endfor%}
 
     </main>
 
