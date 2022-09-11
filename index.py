@@ -1,48 +1,31 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 import plotly.graph_objects as go
 import json
 import plotly
 import plotly.io as pio
 import chart_studio.plotly as py
 import numpy as np
+from pytz import timezone
+import datetime
 
 app = Flask(__name__)
-
 
 #https://stackoverflow.com/questions/4828406/import-a-python-module-into-a-jinja-template
 #https://plotly.com/python/creating-and-updating-figures/
 #https://plotly.com/python/renderers/
 
-
-#HACER TIEMPO DE IMAGENES
-'''def create_fig(retailers, skus, title, price_evolution_data):   
+def create_fig(retailers, skus, title, price_evolution_data, time):   
     ## create traces
     fig = go.Figure()
 
-    ## navigate for each retail and sku
-    for retail, sku in zip(retailers, skus):
-        ## select the sku and retail
-        query = price_evolution_data.loc[(price_evolution_data['sku'] == sku) & (price_evolution_data['retail'] == retail)]
-        price = query["price"] ## get the price
-        date = query["date"] ## get the date
-        
-        fig.add_trace(go.Scatter(x=date.values,
-                                 y=price.values,                                
-                                 name=retail))
-        
-    fig.update_traces(mode='lines+markers')
-    fig.update_layout(title={
-                            'text': title,
-                            'y':0.9,
-                            'x':0.5,
-                            'xanchor': 'center',
-                            'yanchor': 'top'})
-    
-    return fig'''
-
-def create_fig(retailers, skus, title, price_evolution_data):   
-    ## create traces
-    fig = go.Figure()
+    #NUEVO
+    est = timezone('EST')
+    now = datetime.datetime.now(est) - datetime.timedelta(days=int(time))
+    year = '{:02d}'.format(now.year)
+    month = '{:02d}'.format(now.month)
+    day = '{:02d}'.format(now.day)
+    current_date = '{}-{}-{}'.format(year, month, day)
+    #####
 
     #Save prices
     prices = []
@@ -50,6 +33,8 @@ def create_fig(retailers, skus, title, price_evolution_data):
     for retail, sku in zip(retailers, skus):
         ## select the sku and retail
         query = price_evolution_data.loc[(price_evolution_data['sku'] == sku) & (price_evolution_data['retail'] == retail)]
+        query = query.loc[query["date"]>=current_date]
+
         price = query["price"] ## get the price
         date = query["date"] ## get the date
         
@@ -74,36 +59,42 @@ def create_fig(retailers, skus, title, price_evolution_data):
 def pagina_principal():
     return render_template('index.html')
 
-@app.route("/prueba")
+@app.route("/prueba", methods=["GET", "POST"])
 def pag_prueba():
+
+    try:
+        dias = request.form['days']
+        print(dias)
+    except:
+        dias = 7
+    
     retailers = ["wong", "metro", "plaza_vea", "tottus", "vivanda"]
     skus = ["59539001", "59539001", "497497", "10174358", "497497"]
     title = 'INKA COLA 500ML'
-    fig, price = create_fig(retailers, skus, title, price_evolution_data)
+    fig, price = create_fig(retailers, skus, title, price_evolution_data, dias)
     fig.write_html("static/img/fig2.html") #NO HACE OVERWRITE, BUSCAR FORMA PARA HACERLO
 
-    #mi,ma, mean, var_t, var_d = estadisticos(price)
-    #return render_template('prueba.html', mi=mi, ma=ma, mean=mean,var_t=var_t,var_d=var_d)
-
-    mins, maxs, variacion = estadisticos(price)
+    mins, maxs, variacion, media = estadisticos(price)
     retailers = ["WONG", "METRO", "PLAZA VEA", "TOTTUS", "VIVANDA"]
 
+    print("GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    print("Minimo: ", type(mins), "\n")
+    print("Maximo: ", type(maxs), "\n")
+    print("Variacion: ", type(variacion), "\n")
+    print("Media: ", type(media), "\n")
 
-    return render_template('prueba.html',mins = mins, maxs = maxs, variacion=variacion,retailers=retailers)
-
-'''@app.context_processor
-def add_imports():
-    return dict(numpy=numpy)    
-'''
+    return render_template('prueba.html',mins = mins, maxs = maxs, variacion=variacion,retailers=retailers, media=media)
 
 def estadisticos(price):
     maxs = []
     mins = []
+    media = []
     #1: WONG, 2: METRO, 3: PLAZA VEA, 4: TOTTUS Y 5: VIVANDA
     for i in price:
         if len(i)!=0:
             mins.append(np.nanmin(i))
             maxs.append(np.nanmax(i))
+            media.append(np.average(i))
         else:
             mins.append(99999)
             maxs.append(0)
@@ -111,26 +102,9 @@ def estadisticos(price):
     mins = comparador_min(mins)
     maxs = comparador_max(maxs)
     var = variacion(price)
-    return mins, maxs, var
+    media = np.round(np.nanmean(media),1)
 
-'''#Para estos 3, está bien juntar todos
-#MINIMO, MAXIMO, PROMEDIO DE TODA LA SEMANA O EL PERIODO DE TIEMPO
-minimo = np.min(price)
-maximo = np.max(price)
-promedio = np.round(np.mean(price),1)
-
-#Variación inicio a fin (NO ES DE TODOS JUNTOS)
-inicio = price[0]
-fin = price[-1]
-variacion_total = ((fin-inicio)/inicio)*100
-
-#Variacion ultimas 24h (NO ES DE TODOS JUNTOS)
-inicio = price[-4]
-fin = price[-1]
-variacion_dia = ((fin-inicio)/inicio)*100
-
-return minimo, maximo, promedio, variacion_total, variacion_dia
-'''
+    return mins, maxs, var, media
 
 def comparador_min(lista_prices):
     #1: WONG, 2: METRO, 3: PLAZA VEA, 4: TOTTUS Y 5: VIVANDA

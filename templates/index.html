@@ -34,6 +34,7 @@
             <link rel="stylesheet" href="{{ url_for('static', filename='css/slick.css')}}">
             <link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css')}}">
             <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/pipeline.css')}}">
 
         <!-- Plotly -->
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -120,7 +121,9 @@
                     
                                         <li><a href="#observatorio">Comparación</a></li>                                    
                                         <li><a href="#contact">Contacto</a></li>
-                                        <li><a href="https://pixmap.io/" target="_blank">Pixmap</a></li>
+                                        <li><a href="https://pixmap.io/" target="_blank" >Pixmap</a></li>
+                                        <li><a id="pipeline"></a></li>
+                                        <li class="pipeline"><a href="{{url_for('login')}}" >Iniciar Sesion</a></li>
 
                                         <!--
                                         <li><a href="#">Users</a>

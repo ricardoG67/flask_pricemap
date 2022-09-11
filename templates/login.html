@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricemap - Registrate</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flaticon.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/slicknav.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome-all.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themify-icons.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/slick.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css')}}">
+
+</head>
+
+<body>
+    <header>
+        <!-- Header Start -->
+        <div class="header-area header-transparrent">
+            <div class="main-header header-sticky">
+                <div class="container">
+                    <div class="row align-items-center" style="padding-top: 15px;">
+                        <!-- Logo -->
+                        <div class="col-xl-2 col-lg-2 col-md-2">
+                            <div class="logo">
+                                <a href="https://pricemap.neurometrics.la"><img src="../static/img/logo/pricemap_logo.png" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="col-xl-10 col-lg-10 col-md-10">
+                            <!-- Main-menu -->
+
+                            <!---->
+                            <div class="main-menu f-right d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation">
+
+                                        <li><a href="https://pricemap.neurometrics.la">Regresar</a></li>
+
+                                        <!--
+                                        <li><a href="#">Users</a>
+                                            <ul class="submenu">
+                                                <li><a href="blog.html">Blog</a></li>
+                                                <li><a href="single-blog.html">Blog Details</a></li>
+                                                <li><a href="elements.html">Element</a></li>
+                                            </ul>
+                                        </li> 
+                                        -->
+
+                                    </ul>
+                                </nav>
+                            </div>
+
+                        </div>
+                        <!-- Mobile Menu -->
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Header End -->
+    </header>
+
+
+
+    <div class="flex">
+        <div class="loginmodal-container">
+            <h1>Iniciar Sesion</h1><br>
+            <form action="login_comprobacion" method="POST">
+                <input type="text" name="email" placeholder="Correo" required>
+                <input type="password" name="pass" placeholder="Contraseña" required>
+                <input type="submit" name="signup" class="login loginmodal-submit" value="Inicia Sesion">
+            </form>
+    
+
+            <div class="errores">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {%for message in messages%}
+                        {{message}}
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

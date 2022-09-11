@@ -71,7 +71,7 @@ for i in description:
         inca.append(i)
 
 print((inca))'''
-
+'''
 from flask import Flask, render_template
 import plotly.graph_objects as go
 import json
@@ -121,20 +121,19 @@ def create_fig(retailers, skus, title, price_evolution_data, time):
                             'xanchor': 'center',
                             'yanchor': 'top'})
     
-    return fig, prices
+    return fig, prices'''
 
-retailers = ["wong", "metro", "plaza_vea", "tottus", "vivanda"]
+'''retailers = ["wong", "metro", "plaza_vea", "tottus", "vivanda"]
 skus = ["59539001", "59539001", "497497", "10174358", "497497"]
 title = 'INKA COLA 500ML'
 import pandas as pd
 price_evolution_data = pd.read_csv("price_evolution.csv")
 time = "7"
 fig, price = create_fig(retailers, skus, title, price_evolution_data, time)
-fig.show(renderer="iframe")
+fig.show(renderer="iframe")'''
 
-'''import datetime
-from pytz import timezone
-est = timezone('EST')
+
+'''est = timezone('EST')
 now = datetime.datetime.now(est) - datetime.timedelta(days=7)
 year = '{:02d}'.format(now.year)
 month = '{:02d}'.format(now.month)
@@ -143,3 +142,67 @@ current_date = '{}-{}-{}'.format(year, month, day)
 print(current_date)
 seven_days = price_evolution_data.loc[price_evolution_data["date"]>=current_date]
 print(seven_days)'''
+
+'''import numpy as np
+
+price = np.array([[2.6, 2.6], [1.3, 1.5], [4, 5], [3,2], [9,8]])
+
+print(np.mean(price))
+
+media = []
+for i in price:
+    media.append(np.average(i))
+
+print(np.average(media))'''
+import datetime
+from pytz import timezone
+import pandas as pd
+import plotly.graph_objects as go
+
+price_evolution_data = pd.read_csv("retail_data_final.csv")
+
+if "INCA KOLA" in price_evolution_data["description"]:
+    print(price_evolution_data["description"])
+    print("gaaaa")
+
+def create_fig(retailers, skus, title, price_evolution_data, time):   
+    ## create traces
+    fig = go.Figure()
+
+    #NUEVO
+    est = timezone('EST')
+    now = datetime.datetime.now(est) - datetime.timedelta(days=int(time))
+    year = '{:02d}'.format(now.year)
+    month = '{:02d}'.format(now.month)
+    day = '{:02d}'.format(now.day)
+    current_date = '{}-{}-{}'.format(year, month, day)
+    #####
+
+    #Save prices
+    prices = []
+    ## navigate for each retail and sku
+    for retail, sku in zip(retailers, skus):
+        ## select the sku and retail
+        query = price_evolution_data.loc[(price_evolution_data['sku'] == sku) & (price_evolution_data['retail'] == retail)]
+        query = query.loc[query["date"]>=current_date]
+
+        price = query["price"] ## get the price
+        date = query["date"] ## get the date
+        
+        fig.add_trace(go.Scatter(x=date.values,
+                                 y=price.values,                                
+                                 name=retail))
+
+        prices.append(price.values)
+        #[prices.append(i) for i in price.values]
+
+    fig.update_traces(mode='lines+markers')
+    fig.update_layout(title={
+                            'text': title,
+                            'y':0.9,
+                            'x':0.5,
+                            'xanchor': 'center',
+                            'yanchor': 'top'})
+    
+    return fig, prices
+

@@ -41,8 +41,7 @@
 
     <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
-
+    <script src="{{url_for('static', filename='js/dashscript.js')}}"></script>
 </head>
 
 <body>
@@ -55,7 +54,7 @@
                         <!-- Logo -->
                         <div class="col-xl-2 col-lg-2 col-md-2">
                             <div class="logo">
-                                <a href="index.html"><img src="../static/img/logo/pricemap_logo.png" alt=""></a>
+                                <a href="https://pricemap.neurometrics.la"><img src="../static/img/logo/pricemap_logo.png" alt=""></a>
                             </div>
                         </div>
                         <div class="col-xl-10 col-lg-10 col-md-10">
@@ -66,9 +65,8 @@
                                 <nav>
                                     <ul id="navigation">
 
-                                        <li><a href="#observatorio">Comparación</a></li>
-                                        <li><a href="#contact">Contacto</a></li>
                                         <li><a href="https://pixmap.io/" target="_blank">Pixmap</a></li>
+                                        <li><a href="{{url_for('logout')}}">Cerrar sesión</a></li>
 
                                         <!--
                                         <li><a href="#">Users</a>
@@ -96,39 +94,79 @@
         <!-- Header End -->
     </header>
 
+    <div class="sidebar">
+
+        <div id="myBtnContainer">
+            <button class="btn" onclick="filterSelection('all')">TODOS</button>
+            <button class="btn" onclick="filterSelection('Arroz')">ARROZ</button>
+            <button class="btn" onclick="filterSelection('Atun')">ATUN</button>
+            <button class="btn" onclick="filterSelection('Azucar')">AZUCAR</button>
+            <button class="btn" onclick="filterSelection('Fideo')">FIDEO</button>
+            <button class="btn" onclick="filterSelection('Leche')">LECHE</button>
+            <button class="btn" onclick="filterSelection('Gaseosa')">GASEOSA</button>
+        </div>
+
+        <form action="/dashboard" method="post" class="form-dash">
+
+            <input type="radio" id="seven_days" name="days" value="7">
+            <label for="seven_days">Siete dias</label>
+
+            <input type="radio" id="fourteen_weeks" name="days" value="14">
+            <label for="fourteen_weeks">Catorce dias</label>
+
+            <input type="radio" id="one_month" name="days" value="30" required>
+            <label for="one_month">Treinta dias</label>
+
+            <input type="submit" class="boton-submit" value="Cambiar Fecha">
+
+        </form>
+    </div>
+
     <main>
+        <div class="titulos">
+            <h3>Gráficos</h3>
+            <h3>Estadisticos</h3>
+        </div>
+        <div class="grid-layout">
 
-        <input type="radio" id="seven_days" name="days" value="7">
-        <label for="seven_days">Siete dias</label><br>
+            {% for i in range(0, productos|length) %}
+            <div class="filterDiv {{categorias[i]}} show">
 
-        <input type="radio" id="fourteen_weeks" name="days" value="14">
-        <label for="fourteen_weeks">Catorce dias</label><br>
+                <embed src="{{ productos[i] }}" frameborder="0" scrolling="no" width="500px" height="400px" loading="lazy">
 
-        <input type="radio" id="one_month" name="days" value="30">
-        <label for="one_month">Un mes</label>
+                <div class="caja">
 
-        <iframe src="{{ url_for('static', filename='img/fig2.html')}}" frameborder="0" scrolling="no" width="500px"
-            height="400px"></iframe>
+                    <div class="caja-1">
+                        <h4>INDICADORES</h4>
+                        <p>El precio medio es de: S/{{media[i]}}</p>
+                        <p>El precio minimo está en: {{mins[i][0]}} con S/{{mins[i][1]}}</p>
+                        <p>El precio maximo está en: {{maxs[i][0]}} con S/{{maxs[i][1]}}</p>
+                    </div>
+                    <div class="caja-2">
+                        {% set count = namespace(value=0) %}
+                        {% for j in variacion[i] %}
 
-        <p>El precio minimo está en: {{mins[0]}} con {{mins[1]}}</p>
-        <p>El precio maximo está en: {{maxs[0]}} con {{maxs[1]}}</p>
+                            {%if j is not none and j != "nan"%}
+                                <p>{{retailers[count.value]}}: {{j}}%</p>
+                            {%else%}
+                                <p>{{retailers[count.value]}}: No hay registro de datos</p>
+                            {%endif%}
 
-        <h4>VARIACION</h4>
-        {% set count = namespace(value=0) %}
-        {% for i in variacion %}
+                        {% set count.value = count.value + 1 %}
+                        {%endfor%}
 
-        {%if i is not none and i != "nan"%}
-        <p>{{retailers[count.value]}}: {{i}}%</p>
-        {%else%}
-        <p>{{retailers[count.value]}}: No hay registro de datos</p>
-        {%endif%}
+                    </div>
 
-        {% set count.value = count.value + 1 %}
+                </div>
 
-        {%endfor%}
+            </div>
+            {%endfor%}
+
+        </div>
+
+
 
     </main>
-
 </body>
 
 
