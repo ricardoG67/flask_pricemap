@@ -64,9 +64,8 @@ def pag_prueba():
 
     try:
         dias = request.form['days']
-        print(dias)
     except:
-        dias = 7
+        dias = "7"
     
     retailers = ["wong", "metro", "plaza_vea", "tottus", "vivanda"]
     skus = ["59539001", "59539001", "497497", "10174358", "497497"]
@@ -83,7 +82,9 @@ def pag_prueba():
     print("Variacion: ", type(variacion), "\n")
     print("Media: ", type(media), "\n")
 
-    return render_template('prueba.html',mins = mins, maxs = maxs, variacion=variacion,retailers=retailers, media=media)
+    checked = "checked"
+
+    return render_template('borrar.html',mins = mins, maxs = maxs, variacion=variacion,retailers=retailers, media=media, dias = dias, checked=checked)
 
 def estadisticos(price):
     maxs = []

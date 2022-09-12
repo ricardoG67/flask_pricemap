@@ -153,7 +153,7 @@ media = []
 for i in price:
     media.append(np.average(i))
 
-print(np.average(media))'''
+print(np.average(media))
 import datetime
 from pytz import timezone
 import pandas as pd
@@ -206,3 +206,8 @@ def create_fig(retailers, skus, title, price_evolution_data, time):
     
     return fig, prices
 
+'''
+
+tupla = (("wong",2), ("xd",5), ("plaza_Vea",5))
+
+[print(i.capitalize().replace("_"," ")) for i,j in tupla]
