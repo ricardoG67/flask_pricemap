@@ -207,7 +207,60 @@ def create_fig(retailers, skus, title, price_evolution_data, time):
     return fig, prices
 
 '''
-
+'''
 tupla = (("wong",2), ("xd",5), ("plaza_Vea",5))
 
-[print(i.capitalize().replace("_"," ")) for i,j in tupla]
+[print(i.capitalize().replace("_"," ")) for i,j in tupla]'''
+'''import numpy as np
+x = [np.nan, np.nan, 1, 2, 3, 4,5, np.nan, np.nan, 8,9,np.nan, 10]
+d = [np.nan, 9, np.nan, 2, 2 ,2]
+a=[]
+
+x = np.array(x)
+d = np.array(d)
+
+a.append(x)
+a.append(d)
+a = np.array(a)
+
+print("Asi empieza: ")
+print(a, "\n\n")
+
+sin_Nan = []
+for i in a:
+    i = np.where(np.isnan(i)==False, i,0)
+    i = i[i!=0]
+    sin_Nan.append(i)
+
+print(sin_Nan)
+'''
+'''
+ANTES DE CAMBIAR 
+def variacion(lista_prices):
+    cnx = mysql.connector.connect(host='neurometricslab.mysql.pythonanywhere-services.com', user='neurometricslab', password='pricemap', database='neurometricslab$default')
+
+    #1: WONG, 2: METRO, 3: PLAZA VEA, 4: TOTTUS Y 5: VIVANDA
+
+    sin_Nan = []
+    for i in lista_prices:
+        i = np.where(np.isnan(i)==False, i,0)
+        i = i[i!=0]
+        sin_Nan.append(i)
+
+    lista_variaciones = []
+    for i in lista_prices:
+        if len(i) == 0:
+            variacion = None
+            lista_variaciones.append(variacion)
+        else:
+            fin = i[-1]
+            inicio = i[0]
+            variacion = ((fin-inicio)/inicio)*100
+            variacion = np.round(np.mean(variacion),1)
+            if np.isnan(variacion):
+                lista_variaciones.append(None)
+            else:
+                lista_variaciones.append(variacion)
+
+    return lista_variaciones
+'''

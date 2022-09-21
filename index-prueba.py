@@ -16,6 +16,10 @@ app.secret_key = 'mysecretkey'
 def pagina_principal():
     return render_template('index.html')
 
+@app.route("/faqs")
+def faqs():
+    return render_template('faqs.html')
+
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
 
