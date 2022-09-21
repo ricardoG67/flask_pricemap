@@ -22,18 +22,36 @@ html,main{
 
 .sidebar{
     height: 100%;
-    width: 300px;
+    width: 180px;
     position: fixed;
     left: 0;
     top: 0;
     bottom: 0%;
     background-color: white;
     padding: 15px;
+    padding-left: 0;
     box-shadow: 0 0 20px 8px #d0d0d0;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+}
+
+ul#navigation{
+    display: flex;
+    justify-content: space-between;
+}
+
+.f-right{
+    float: none;
+}
+
+.container{
+    width: 95%;
+}
+
+.main-header, .main-menu{
+    margin-right: 0px;
 }
 
 input{
@@ -58,10 +76,11 @@ input{
 
     .boton-submit{
         grid-column: 1/3;
-        width: 100%;
+        width: 60%;
         height: auto;
         margin-left: auto;
         margin-right: auto;
+        white-space: normal;
     }
 
 .grid-layout{
@@ -69,7 +88,7 @@ input{
     grid-template-columns: 100%;
     justify-content: space-around;
     height: 100%;
-    width: 75%;
+    width: 85%;
     padding: 30px;
     margin-right: 0;
     margin-left: auto;
@@ -77,7 +96,7 @@ input{
 
 .titulos{
     height: 100%;
-    width: 75%;
+    width: 100%;
     padding: 30px;
     padding-bottom: 0;
     margin-right: 0;
@@ -85,7 +104,7 @@ input{
     margin-top: 100px;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-evenly;
 }
 
     .titulos h3{
@@ -107,12 +126,13 @@ input{
     }
         .caja-1 p{
             font-size: 16px;
+            margin-bottom: 0;
         }
 
     .caja-2{
         padding: 5px;
         display: grid;
-        grid-template-columns: 50% 50%;
+        grid-template-columns: 100%;
         grid-template-rows: auto 25% 25% 25% 25%;
     }
         .caja-2 h4{
@@ -122,6 +142,7 @@ input{
         }
 
         .caja-2 p{
+            margin-bottom: 0;
             font-size: 16px;
         }
 
@@ -131,6 +152,7 @@ input{
     margin-bottom: 20px;
     border-radius: 3%;
     background-color: white;
+    height: 400px;
 }
 
 /* The "show" class is added to the filtered elements */
@@ -163,5 +185,23 @@ input{
 
 /* Add a dark background to the active button */
 
+object{
+    padding: 15px;
+    height: 100%;
+    width: 85%;
+}
 
+#btn-modal{
+    font-size: 14px;
+    border-radius: 50%;
+    border: none;
+    padding: 8px 13px;
+}
 
+.eliminar-registro{
+    background-color: red;
+}
+
+.eliminar-registro:hover{
+    background-color: red;
+}

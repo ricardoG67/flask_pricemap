@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -35,15 +34,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/slick.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logs.css')}}">
 
     <!--CREADO RECIENTEMENTE-->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashstyle.css')}}">
 
     <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="{{url_for('static', filename='js/dashscript.js')}}"></script>
 </head>
-
 <body>
     <header>
         <!-- Header Start -->
@@ -64,7 +62,7 @@
                             <div class="main-menu f-right d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-
+                                        <li><a href="https://pixmap.io/" target="_blank">Productos</a></li>
                                         <li><a href="https://pixmap.io/" target="_blank">Pricemap index</a></li>
                                         <li><a href="https://pixmap.io/" target="_blank">Reportes</a></li>
                                         <li><a href="https://pixmap.io/" target="_blank">FAQs</a></li>
@@ -96,91 +94,16 @@
         <!-- Header End -->
     </header>
 
-    <div class="sidebar">
-
-        <div id="myBtnContainer">
-            <button class="btn active" onclick="filterSelection('Arroz')">ARROZ</button>
-            <button class="btn" onclick="filterSelection('Atun')">ATUN</button>
-            <button class="btn" onclick="filterSelection('Azucar')">AZUCAR</button>
-            <button class="btn" onclick="filterSelection('Fideo')">FIDEO</button>
-            <button class="btn" onclick="filterSelection('Leche')">LECHE</button>
-            <button class="btn" onclick="filterSelection('Gaseosa')">GASEOSA</button>
+    <div class="logs">
+        <p class="texto-info">Actualmente se encuentra en la vista de administrador, haga click en productos para tener la vista usuario</p>
+        <div class="cuadro">
+            <h3>LOGS</h3>
+            {% for i in logs %}
+                <p>{{i}}</p>
+            {% endfor %}
         </div>
-
-        <form action="/dashboard" method="post" class="form-dash">
-
-            <input type="radio" id="seven_days" name="days" value="7">
-            <label for="seven_days">Siete dias</label>
-
-            <input type="radio" id="fourteen_weeks" name="days" value="14">
-            <label for="fourteen_weeks">Catorce dias</label>
-
-            <input type="radio" id="one_month" name="days" value="30" required>
-            <label for="one_month">Treinta dias</label>
-
-            <input type="submit" class="boton-submit" value="Cambiar Fecha">
-
-        </form>
     </div>
 
-    <main>
-        <div class="titulos">
-            <h3>Gráficos</h3>
-            <h3>Estadisticos</h3>
-        </div>
-        <div class="grid-layout">
-
-            {% for i in range(0, productos|length) %}
-            <div class="filterDiv {{categorias[i]}}">
-
-                <!-- <embed src="{{ productos[i] }}" frameborder="0" scrolling="no" width="500px" height="400px" loading="lazy"> -->
-                <object data="{{productos[i]}}" width="500px" height="400px"></object>
-                
-                <div class="caja">
-
-                    <div class="caja-1">
-                        <h4 style="color: #4c98f2;">INDICADORES</h4>
-                        <p>El precio medio es de: S/{{media[i]}}</p>
-                        <p>El precio minimo está en: {{mins[i][0]}} con S/{{mins[i][1]}}</p>
-                        <p>El precio maximo está en: {{maxs[i][0]}} con S/{{maxs[i][1]}}</p>
-
-                        {% set count = namespace(value=0) %}
-                        {% for j in variacion[i] %}
-
-                            {%if j is not none and j != "nan"%}
-                                <p>Variación precios {{retailers[count.value]}}: {{j}}%</p>
-                            {%else%}
-                                <p>En {{retailers[count.value]}} no hay registro de datos</p>
-                            {%endif%}
-
-                        {% set count.value = count.value + 1 %}
-                        {%endfor%}
-
-                    </div>
-
-                </div>
-
-            </div>
-            {%endfor%}
-
-        </div>
-
-
-
-    </main>
+    
 </body>
-
-<script>
-    filterSelection("Arroz");
-</script>
-
-
-<!-- <embed src="../images/fig1.html" /> -->
-<!-- <img src="../images/fig1.svg">
-SOY UN EMBED
-<embed src="../images/fig1.svg" />
-SOY UN IFRAME
-<iframe src="../images/fig1.svg" width="400px" height="400px"></iframe> -->
-
-
 </html>

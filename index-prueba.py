@@ -81,6 +81,16 @@ def dashboard():
 
     return render_template('prueba.html',mins = minimos, maxs = maximos, variacion=variaciones,retailers=retailers, media=medias, productos=productos, categorias=categorias)
 
+@app.route("/admin")
+def admin():
+    if 'admin' not in session:
+        return "<h1>SOLO EL ADMINISTRADOR PUEDE VER ESTA PÁGINA</h1>"
+
+    with open("log_precios.txt") as f:
+        logs = f.readlines()
+
+    return render_template("dashboard-admin.html", logs = logs)
+
 @app.route("/register")
 def signup():
     return render_template("signup.html")
@@ -123,6 +133,9 @@ def login_comprobacion():
     if data!=None:
         if bcrypt.check_password_hash(data[2],pass1):
             session["email"] = email
+            if data[3] == "admin":
+                session["admin"] = data[3]
+                return redirect(url_for('admin'))
             return redirect(url_for('dashboard'))
         else:
             flash('La contraseña es incorrecta')
@@ -154,7 +167,51 @@ def validar(e):
 def logout():
     if "email" in session:
         session.pop("email")
+    if "admin" in session:
+        session.pop("admin")
     return redirect(url_for("login"))
+
+@app.route("/usuarios")
+def usuarios():
+    if 'admin' not in session:
+        return "<h1>SOLO EL ADMINISTRADOR PUEDE VER ESTA PÁGINA</h1>"
+
+    cursor = cnx.cursor()
+    cursor.execute('SELECT * FROM users')
+    data = cursor.fetchall()
+
+    return render_template("usuarios.html", data = data)
+
+# decimos que esta al lado de un string llamado id
+@app.route('/delete_task/<string:id>')
+def delete_contact(id):
+    cursor = cnx.cursor()
+    eliminar = 'DELETE FROM users WHERE id=%s'
+    # (id,) tambien sirve, es un error que no recibe string solo list o tuplas
+    cursor.execute(eliminar, [id])
+    cnx.commit()
+    return redirect(url_for('usuarios'))
+
+@app.route('/update_task/<string:id>')
+def update_contact(id):
+    cursor = cnx.cursor()
+    cursor.execute('SELECT * FROM users WHERE id=%s', [id])
+    data = cursor.fetchone()
+    cnx.commit()
+    return render_template('usuarios-edit.html', data=data)
+
+
+@app.route('/update/<string:id>', methods=['POST'])
+def update(id):
+    email = request.form['email']
+    tipo_usuario = request.form['tipo_usuario']
+
+    cursor = cnx.cursor()
+    update = ("UPDATE users SET email=%s, tipo_usuario=%s where id=%s")
+    cursor.execute(update, (email, tipo_usuario, id))
+    cnx.commit()
+
+    return redirect(url_for('usuarios'))
 
 if __name__ == '__main__':
     app.run(debug=True)

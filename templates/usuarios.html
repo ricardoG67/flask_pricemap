@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -24,6 +23,7 @@
 
 
     <!-- CSS here -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/flaticon.css')}}">
@@ -35,15 +35,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/slick.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logs.css')}}">
 
-    <!--CREADO RECIENTEMENTE-->
+    <!--CREADO RECIENTEMENTE--> 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashstyle.css')}}">
 
     <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="{{url_for('static', filename='js/dashscript.js')}}"></script>
-</head>
+    
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css">
+</head>
 <body>
     <header>
         <!-- Header Start -->
@@ -64,7 +66,7 @@
                             <div class="main-menu f-right d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-
+                                        <li><a href="https://pixmap.io/" target="_blank">Productos</a></li>
                                         <li><a href="https://pixmap.io/" target="_blank">Pricemap index</a></li>
                                         <li><a href="https://pixmap.io/" target="_blank">Reportes</a></li>
                                         <li><a href="https://pixmap.io/" target="_blank">FAQs</a></li>
@@ -96,91 +98,57 @@
         <!-- Header End -->
     </header>
 
-    <div class="sidebar">
-
-        <div id="myBtnContainer">
-            <button class="btn active" onclick="filterSelection('Arroz')">ARROZ</button>
-            <button class="btn" onclick="filterSelection('Atun')">ATUN</button>
-            <button class="btn" onclick="filterSelection('Azucar')">AZUCAR</button>
-            <button class="btn" onclick="filterSelection('Fideo')">FIDEO</button>
-            <button class="btn" onclick="filterSelection('Leche')">LECHE</button>
-            <button class="btn" onclick="filterSelection('Gaseosa')">GASEOSA</button>
-        </div>
-
-        <form action="/dashboard" method="post" class="form-dash">
-
-            <input type="radio" id="seven_days" name="days" value="7">
-            <label for="seven_days">Siete dias</label>
-
-            <input type="radio" id="fourteen_weeks" name="days" value="14">
-            <label for="fourteen_weeks">Catorce dias</label>
-
-            <input type="radio" id="one_month" name="days" value="30" required>
-            <label for="one_month">Treinta dias</label>
-
-            <input type="submit" class="boton-submit" value="Cambiar Fecha">
-
-        </form>
-    </div>
-
-    <main>
-        <div class="titulos">
-            <h3>Gráficos</h3>
-            <h3>Estadisticos</h3>
-        </div>
-        <div class="grid-layout">
-
-            {% for i in range(0, productos|length) %}
-            <div class="filterDiv {{categorias[i]}}">
-
-                <!-- <embed src="{{ productos[i] }}" frameborder="0" scrolling="no" width="500px" height="400px" loading="lazy"> -->
-                <object data="{{productos[i]}}" width="500px" height="400px"></object>
-                
-                <div class="caja">
-
-                    <div class="caja-1">
-                        <h4 style="color: #4c98f2;">INDICADORES</h4>
-                        <p>El precio medio es de: S/{{media[i]}}</p>
-                        <p>El precio minimo está en: {{mins[i][0]}} con S/{{mins[i][1]}}</p>
-                        <p>El precio maximo está en: {{maxs[i][0]}} con S/{{maxs[i][1]}}</p>
-
-                        {% set count = namespace(value=0) %}
-                        {% for j in variacion[i] %}
-
-                            {%if j is not none and j != "nan"%}
-                                <p>Variación precios {{retailers[count.value]}}: {{j}}%</p>
-                            {%else%}
-                                <p>En {{retailers[count.value]}} no hay registro de datos</p>
-                            {%endif%}
-
-                        {% set count.value = count.value + 1 %}
-                        {%endfor%}
-
-                    </div>
-
-                </div>
-
+    <div class="logs">
+        <div>
+            <div class="agregar">
+                <p>Agregar:</p>
             </div>
-            {%endfor%}
+            <table id="data" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>EMAIL</th>
+                        <th>TIPO_USUARIO</th>
+                        <th>ACCIONES</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in data %}
+                    <tr>
+                        <td>{{ i.0 }}</td>
+                        <td>{{ i.1 }}</td>
+                        <td>{{ i.3 }}</td>
+                        <td>
+                            <a href="/update_task/{{i.0}}">Editar</a>
+                        </td>
+                        <td><a href="" data-bs-toggle="modal" data-bs-target="#exampleModal">Eliminar</a></td>
 
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación de registro</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                ¿Seguro que desea borrar el registro?
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" id="btn-modal" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" id="btn-modal" class="eliminar-registro" href="/delete_task/{{i.0}}">Eliminar</button>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-
-
-
-    </main>
+    </div>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
 </body>
-
-<script>
-    filterSelection("Arroz");
-</script>
-
-
-<!-- <embed src="../images/fig1.html" /> -->
-<!-- <img src="../images/fig1.svg">
-SOY UN EMBED
-<embed src="../images/fig1.svg" />
-SOY UN IFRAME
-<iframe src="../images/fig1.svg" width="400px" height="400px"></iframe> -->
-
-
 </html>
