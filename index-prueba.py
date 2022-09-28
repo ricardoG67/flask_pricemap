@@ -3,10 +3,12 @@ import ast
 import mysql.connector
 from flask_bcrypt import Bcrypt
 from validate_email import validate_email
+import datetime
+from pytz import timezone
 
 app = Flask(__name__)
 
-cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
+#cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
 bcrypt = Bcrypt(app)
 
 # SESION
@@ -18,7 +20,40 @@ def pagina_principal():
 
 @app.route("/faqs")
 def faqs():
-    return render_template('faqs.html')
+    
+    '''
+    
+
+    ###########################################
+    #PARA MÁS CATEGORIAS SE TIENE QUE VER DE QUE SE TIENE PRECIOS E INFORMACIÓN
+
+    Ver los skus y agregarlos directamente a la base de datos
+
+    Luego correr estadisticos
+    '''
+
+    return render_template('faqs.html', fecha = fecha)
+
+def actualizar_fecha_login(email):
+    #ESTE ES EL APPROACH MÁS SENCILLO  Y EL MEJOR 
+    #FALTA AGREGAR EL INICIO DE LA CONEXION Y EL CIERRE
+    est = timezone('EST')
+    now = datetime.datetime.now(est)
+    year = '{:02d}'.format(now.year)
+    month = '{:02d}'.format(now.month)
+    day = '{:02d}'.format(now.day)
+    hour = '{:02d}'.format(now.hour)
+    minute = '{:02d}'.format(now.minute)
+
+    fecha = '{}/{}/{} {}:{}'.format(day, month, year , hour, minute) #Hacer que pueda ser null, y que sea string 
+
+    cursor = cnx.cursor()
+    update = ("UPDATE users SET fecha_login=%s where email=%s")
+    cursor.execute(update, (fecha, email))
+    cnx.commit()
+
+
+
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
@@ -136,10 +171,14 @@ def login_comprobacion():
 
     if data!=None:
         if bcrypt.check_password_hash(data[2],pass1):
+
             session["email"] = email
+
             if data[3] == "admin":
+
                 session["admin"] = data[3]
                 return redirect(url_for('admin'))
+
             return redirect(url_for('dashboard'))
         else:
             flash('La contraseña es incorrecta')
@@ -216,6 +255,11 @@ def update(id):
     cnx.commit()
 
     return redirect(url_for('usuarios'))
+
+@app.route('/reportes')
+def reportes():
+    
+    return render_template('reportes.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
