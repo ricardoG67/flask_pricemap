@@ -264,3 +264,119 @@ def variacion(lista_prices):
 
     return lista_variaciones
 '''
+##################################
+#################
+#################
+#################
+#################
+#################
+#Esto se podria pasar nomas a flask y lo lee con jinja
+'''cuadro_1 = np.load("cuadro_1.npy")
+
+for fila in cuadro_1:
+    descripcion = fila[0]
+    promedio = fila[1]
+    maximo = fila[2]
+    minimo = fila[3]
+    sensibilidad = fila[4]
+    rango = fila[5]
+    print(descripcion,promedio, maximo, minimo, sensibilidad, rango,"\n")'''
+
+'''cuadro_1_1 = np.load("cuadro_1_1.npy", allow_pickle=True)
+
+for fila in cuadro_1_1:
+    descripcion = fila[0]
+    estadisticos_1_1 = fila[1]
+    
+    wong = estadisticos_1_1[0]
+    metro = estadisticos_1_1[1]
+    pv = estadisticos_1_1[2]
+    vivanda = estadisticos_1_1[3]
+    tottus = estadisticos_1_1[4]'''
+
+'''cuadro2= np.load("cuadro2.npy", allow_pickle=True)
+
+for fila in cuadro2:
+    descripcion = fila[0]
+
+    estadisticos2 = fila[1]
+    dia_prom = estadisticos2[0][0]
+    dia_desv = estadisticos2[0][1]
+
+    tarde_prom = estadisticos2[1][0]
+    tarde_desv = estadisticos2[1][1]
+
+    noche_prom = estadisticos2[2][0]
+    noche_desv = estadisticos2[2][1]
+
+    ganador = fila[2]'''
+
+#HACER NUMPY ROUND############################3
+'''=cuadro2_chiquito np.load("cuadro2_chiquito.npy", allow_pickle=True)
+dia = cuadro2_chiquito[0]
+tarde = cuadro2_chiquito[1]
+noche = cuadro2_chiquito[2]
+'''
+
+'''cuadro2_3 = np.load("cuadro2_3.npy", allow_pickle=True)
+
+for fila in cuadro2_3:
+    descripcion = fila[0]
+
+    minimo = fila[1]
+    minimo_dia = minimo[0]
+    minimo_tarde = minimo[1]
+    minimo_noche = minimo[2]
+
+    maximo = fila[2]
+    maximo_dia = maximo[0]
+    maximo_tarde = maximo[1]
+    maximo_noche = maximo[2]
+'''
+'''cuadro3 = np.load("cuadro3.npy", allow_pickle=True)
+
+for fila in cuadro3:
+    descripcion = fila[0]
+
+    supermercados = fila[1]
+    wong = supermercados[0]
+
+    metro = supermercados[1]
+
+    pv = supermercados[2]
+
+    vivanda = supermercados[3]
+
+    tottus = supermercados[4]
+    print(tottus)
+
+    ganador = fila[2]
+'''
+
+'''cuadro4 = np.load("cuadro4.npy", allow_pickle=True)
+
+for fila in cuadro4:
+    descripcion = fila[0]
+
+    supermercados = fila[1]
+    metro = supermercados[0]
+    pv = supermercados[1]
+    tottus = supermercados[2]
+    vivanda = supermercados[3]
+    wong = supermercados[4]
+
+    ganador = fila[2]'''
+
+'''cuadro5 = np.load("cuadro5.npy", allow_pickle=True)
+
+for fila in cuadro5:
+    descripcion = fila[0]
+
+    supermercados = fila[1]
+    metro = supermercados[0]
+    pv = supermercados[1]
+    tottus = supermercados[2]
+    vivanda = supermercados[3]
+    wong = supermercados[4]
+
+    ganador = fila[2]'''

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -43,8 +44,9 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reporte.css')}}">
 </head>
+
 <body>
     <header>
         <!-- Header Start -->
@@ -55,7 +57,8 @@
                         <!-- Logo -->
                         <div class="col-xl-2 col-lg-2 col-md-2">
                             <div class="logo">
-                                <a href="https://pricemap.neurometrics.la"><img src="../static/img/logo/pricemap_logo.png" alt=""></a>
+                                <a href="https://pricemap.neurometrics.la"><img
+                                        src="../static/img/logo/pricemap_logo.png" alt=""></a>
                             </div>
                         </div>
                         <div class="col-xl-10 col-lg-10 col-md-10">
@@ -100,86 +103,360 @@
     <div class="logs">
         <div class="agregar">
             <h2>Reportes estadisticos</h2>
-            <h4>Reporte 1</h4>
         </div>
 
+        <div class="agregar">
+            <h4>Cuadro 1</h4>
+        </div>
         <table id="data" class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>EMAIL</th>
-                    <th>TIPO_USUARIO</th>
-                    <th>ACCIONES</th>
-                    <th></th>
+                    <th>PRODUCTOS</th>
+                    <th>PROMEDIO</th>
+                    <th>MÁXIMO</th>
+                    <th>MÍNIMO</th>
+                    <th>SENSIBLE</th>
+                    <th>RANGO</th>
                 </tr>
             </thead>
             <tbody>
+                {% for fila in cuadro_1 %}
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>                    
+                    <td>{{fila.0}}</td>
+                    <td>{{fila.1}}</td>
+                    <td>{{fila.2}}</td>
+                    <td>{{fila.3}}</td>
+                    <td>{{fila.4}}</td>
+                    <td>{{fila.5}}</td>
                 </tr>
+                {%endfor%}
             </tbody>
         </table>
         <!-- ACA IRIAN LOS TITULARES QUE VIENEN DE ESTA TABLA CON JINJA-->
         <div class="agregar">
-            <p>SOY UN TITULAR DE LA TABLA DE ARRIBA</p>
-            <h4>Reporte 2</h4>
+            <p>{{titulo1}}</p>
+        </div>
+        <div class="agregar">
+            <h4>Cuadro 1_1</h4>
         </div>
 
         <table id="data" class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>EMAIL</th>
-                    <th>TIPO_USUARIO</th>
-                    <th>ACCIONES</th>
                     <th></th>
+                    <th colspan="5">WONG</th>
+                    <th colspan="5">METRO</th>
+                    <th colspan="5">PLAZA VEA</th>
+                    <th colspan="5">VIVANDA</th>
+                    <th colspan="5">TOTTUS</th>
+                </tr>
+                <tr>
+                    <th>PRODUCTOS</th>
+                    <th>Prom</th>
+                    <th>Máx</th>
+                    <th>Mín</th>
+                    <th>Desv</th>
+                    <th>Rango</th>
+                    <th>Prom</th>
+                    <th>Máx</th>
+                    <th>Mín</th>
+                    <th>Desv</th>
+                    <th>Rango</th>
+                    <th>Prom</th>
+                    <th>Máx</th>
+                    <th>Mín</th>
+                    <th>Desv</th>
+                    <th>Rango</th>
+                    <th>Prom</th>
+                    <th>Máx</th>
+                    <th>Mín</th>
+                    <th>Desv</th>
+                    <th>Rango</th>
+                    <th>Prom</th>
+                    <th>Máx</th>
+                    <th>Mín</th>
+                    <th>Desv</th>
+                    <th>Rango</th>
                 </tr>
             </thead>
             <tbody>
+                
+                {% for fila in cuadro_1_1 %}
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>                    
+                    <td>{{fila.0}}</td>
+                    
+                    <!-- fila[1][0] es wong-->
+                    <td>{{fila[1][0][0]}}</td>
+                    <td>{{fila[1][0][1]}}</td>
+                    <td>{{fila[1][0][2]}}</td>
+                    <td>{{fila[1][0][3]}}</td>
+                    <td>{{fila[1][0][4]}}</td>
+
+                    <td>{{fila[1][1][0]}}</td>
+                    <td>{{fila[1][1][1]}}</td>
+                    <td>{{fila[1][1][2]}}</td>
+                    <td>{{fila[1][1][3]}}</td>
+                    <td>{{fila[1][1][4]}}</td>
+                    
+                    <td>{{fila[1][2][0]}}</td>
+                    <td>{{fila[1][2][1]}}</td>
+                    <td>{{fila[1][2][2]}}</td>
+                    <td>{{fila[1][2][3]}}</td>
+                    <td>{{fila[1][2][4]}}</td>
+                    
+                    <td>{{fila[1][3][0]}}</td>
+                    <td>{{fila[1][3][1]}}</td>
+                    <td>{{fila[1][3][2]}}</td>
+                    <td>{{fila[1][3][3]}}</td>
+                    <td>{{fila[1][3][4]}}</td>
+                    
+                    <td>{{fila[1][4][0]}}</td>
+                    <td>{{fila[1][4][1]}}</td>
+                    <td>{{fila[1][4][2]}}</td>
+                    <td>{{fila[1][4][3]}}</td>
+                    <td>{{fila[1][4][4]}}</td>
                 </tr>
+                {%endfor%}
             </tbody>
         </table>
+
         <div class="agregar">
             <p>SOY UN TITULAR DE LA TABLA DE ARRIBA</p>
-            <h4>Reporte 3</h4>
+        </div>
+        <div class="agregar">
+            <h4>Cuadro 2</h4>
         </div>
 
         <table id="data" class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>EMAIL</th>
-                    <th>TIPO_USUARIO</th>
-                    <th>ACCIONES</th>
                     <th></th>
+                    <th colspan="2">Mañana</th>
+                    <th colspan="2">Tarde</th>
+                    <th colspan="2">Noche</th>
+                </tr>
+                <tr>
+                    <th>Productos</th>
+                    <th>Promedio</th>
+                    <th>Desviación</th>
+                    <th>Promedio</th>
+                    <th>Desviación</th>
+                    <th>Promedio</th>
+                    <th>Desviación</th>
+                    <th>Precio más barato en promedio</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+
+                {%for fila in cuadro2%}
+                <tr>
+                    <td>{{fila.0}}</td>
+                    <td>{{fila[1][0][0]}}</td>
+                    <td>{{fila[1][0][1]}}</td>
+
+                    <td>{{fila[1][1][0]}}</td>
+                    <td>{{fila[1][1][1]}}</td>
+
+                    <td>{{fila[1][2][0]}}</td>
+                    <td>{{fila[1][2][1]}}</td>
+
+                    <td>{{fila.2}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <div class="agregar">
+            <p>{{titulo2_1}}</p>
+            {% for i in titulos2_2 %}
+                <p>{{i}}</p>
+            {%endfor%}
+        </div>
+        <div class="agregar">
+            <h4>Cuadro 2 chiquito</h4>
+        </div>
+
+        <table id="data" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>PERIODO</th>
+                    <th>Mañana</th>
+                    <th>Tarde</th>
+                    <th>Noche</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>                    
+                    <td>Desviacion estandar promedio</td>
+                    <td>{{cuadro2_chiquito.0}}</td>
+                    <td>{{cuadro2_chiquito.1}}</td>
+                    <td>{{cuadro2_chiquito.2}}</td>
                 </tr>
+            </tbody>
+        </table>
+
+        <div class="agregar">
+            {%if cuadro2_chiquito|max == cuadro2_chiquito.0%}
+                <p>En la mañana los productos se desvían en promedio un poco más de sus precios promedio que en la tarde y en la noche</p>
+            {%elif cuadro2_chiquito|max == cuadro2_chiquito.1 %}
+                <p>En la tarde los productos se desvían en promedio un poco más de sus precios promedio que en la mañana y en la noche</p>
+            {%else%}
+                <p>En la noche los productos se desvían en promedio un poco más de sus precios promedio que en la mañana y en la tarde</p>
+            {%endif%}
+        </div>
+        <div class="agregar">
+            <h4>Cuadro 2_3</h4>
+        </div>
+
+        <table id="data" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Momentos del día</th>
+                    <th colspan="3">Mínimo</th>
+                    <th colspan="3">Máximo</th>
+                </tr>
+                <tr>
+                    <th>PRODUCTOS</th>
+                    <th>Mañana</th>
+                    <th>Tarde</th>
+                    <th>Noche</th>
+                    <th>Mañana</th>
+                    <th>Tarde</th>
+                    <th>Noche</th>
+                </tr>
+            </thead>
+            <tbody>                
+                {%for fila in cuadro2_3%}
+                <tr>
+                    <td>{{fila.0}}</td>
+                    <td>{{fila[1][0]}}</td>
+                    <td>{{fila[1][1]}}</td>
+                    <td>{{fila[1][2]}}</td>
+
+                    <td>{{fila[2][0]}}</td>
+                    <td>{{fila[2][1]}}</td>
+                    <td>{{fila[2][2]}}</td>
+
+                </tr>
+                {%endfor%}
             </tbody>
         </table>
         <div class="agregar">
             <p>SOY UN TITULAR DE LA TABLA DE ARRIBA</p>
+        </div>
+        <div class="agregar">
+            <h4>Cuadro 3</h4>
+        </div>
+
+        <!-- TABLE 3 -->
+        <!-- REVISAAAAAAAAAAAR DE LA 3 PARA ADELANTE-->
+        <table id="data" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Mínimos</th>
+                    <th>Wong</th>
+                    <th>Metro</th>
+                    <th>Plaza Vea</th>
+                    <th>Vivanda</th>
+                    <th>Tottus</th>
+                    <th>¿Quién tuvo el menor mínimo?</th>
+                </tr>
+            </thead>
+            <tbody>                
+                {%for fila in cuadro3%}
+                <tr>
+                    <td>{{fila.0}}</td>
+
+                    <td>{{fila[1][0]}}</td>
+                    <td>{{fila[1][1]}}</td>
+                    <td>{{fila[1][2]}}</td>
+                    <td>{{fila[1][3]}}</td>
+                    <td>{{fila[1][4]}}</td>
+
+                    <td>{{fila[2]}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <div class="agregar">
+            <p>{{titulo3|capitalize}}</p>
+        </div>
+        <div class="agregar">
+            <h4>Cuadro 4</h4>
+        </div>
+        <!-- TABLE 4 -->
+        <table id="data" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Máximos</th>
+                    <th>Wong</th>
+                    <th>Metro</th>
+                    <th>Plaza Vea</th>
+                    <th>Vivanda</th>
+                    <th>Tottus</th>
+                    <th>¿Quién tuvo el mayor máximo?</th>
+                </tr>
+            </thead>
+            <tbody>                
+                {%for fila in cuadro4%}
+                <tr>
+                    <td>{{fila.0}}</td>
+
+                    <td>{{fila[1][0]}}</td>
+                    <td>{{fila[1][1]}}</td>
+                    <td>{{fila[1][2]}}</td>
+                    <td>{{fila[1][3]}}</td>
+                    <td>{{fila[1][4]}}</td>
+
+                    <td>{{fila[2]}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <div class="agregar">
+            <p>{{titulo4|capitalize}}</p>
+        </div>
+        <div class="agregar">
+            <h4>Cuadro 5</h4>
+        </div>
+        <!-- TABLE 5 -->
+        <table id="data" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Promedio</th>
+                    <th>Wong</th>
+                    <th>Metro</th>
+                    <th>Plaza Vea</th>
+                    <th>Vivanda</th>
+                    <th>Tottus</th>
+                    <th>¿Quién tuvo el menor promedio?</th>
+                </tr>
+            </thead>
+            <tbody>                
+                {%for fila in cuadro5%}
+                <tr>
+                    <td>{{fila.0}}</td>
+
+                    <td>{{fila[1][0]}}</td>
+                    <td>{{fila[1][1]}}</td>
+                    <td>{{fila[1][2]}}</td>
+                    <td>{{fila[1][3]}}</td>
+                    <td>{{fila[1][4]}}</td>
+
+                    <td>{{fila[2]}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <div class="agregar">
+            <p>{{titulo5|capitalize}}</p>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
 
 </body>
+
 </html>

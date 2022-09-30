@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 import pandas as pd
 import mysql.connector
 
-cnx = mysql.connector.connect(host='neurometricslab.mysql.pythonanywhere-services.com', user='neurometricslab', password='pricemap', database='neurometricslab$default')
+cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
 
 def estadisticos(price):
     maxs = []

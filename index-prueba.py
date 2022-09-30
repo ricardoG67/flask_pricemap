@@ -5,10 +5,12 @@ from flask_bcrypt import Bcrypt
 from validate_email import validate_email
 import datetime
 from pytz import timezone
+import numpy as np
+import timeit
 
 app = Flask(__name__)
 
-#cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
+cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
 bcrypt = Bcrypt(app)
 
 # SESION
@@ -259,7 +261,104 @@ def update(id):
 @app.route('/reportes')
 def reportes():
     
-    return render_template('reportes.html')
+    cuadro_1 = np.load("cuadro_1.npy")
+    cuadro_1_1 = np.load("cuadro_1_1.npy", allow_pickle=True)
+    cuadro2= np.load("cuadro2.npy", allow_pickle=True)  
+    cuadro2_chiquito= np.load("cuadro2_chiquito.npy", allow_pickle=True)
+    cuadro2_3 = np.load("cuadro2_3.npy", allow_pickle=True)
+    cuadro3 = np.load("cuadro3.npy", allow_pickle=True)
+    cuadro4 = np.load("cuadro4.npy", allow_pickle=True)
+    cuadro5 = np.load("cuadro5.npy", allow_pickle=True)
+
+    titulo1, titulo2_1, titulos2_2, titulo3, titulo4, titulo5 = titulos_reportes(cuadro_1, cuadro2, cuadro3, cuadro4, cuadro5)
+
+    return render_template('reportes.html', cuadro_1 = cuadro_1, cuadro_1_1 = cuadro_1_1, cuadro2 = cuadro2,
+    cuadro2_chiquito = cuadro2_chiquito, cuadro2_3 = cuadro2_3, cuadro3 = cuadro3, cuadro4=cuadro4, cuadro5 = cuadro5,
+    titulo1=titulo1, titulo2_1=titulo2_1, titulos2_2=titulos2_2, titulo3=titulo3, titulo4=titulo4, titulo5=titulo5)
+
+def titulos_reportes(cuadro_1, cuadro2, cuadro3, cuadro4, cuadro5):
+
+    #TITULOS
+    #Titulo 1:
+    sensibilidad = []
+    productos = {}
+    for fila in cuadro_1:
+        sensibilidad.append(fila[4])
+        productos[fila[4]] = fila[0]
+    
+    mayor_sensibilidad = np.nanmax(list(map(lambda x: float(x), sensibilidad)))
+    mayor_sensibilidad = productos.get(str(mayor_sensibilidad))
+    titulo1 = f"El producto más sensible en todo el mercado es {mayor_sensibilidad}"
+
+    #Titulo 1_1 (FALTA)
+
+    #Titulo 2 (HACERLO EN EL HTML Ver máxima desviación en cuadro chiquito)
+    #Titulo 2_1 (Ver que producto varía más en cada periodo del día)
+    sens_dia = []
+    sens_tarde = []
+    sens_noche = []
+    productos = {}
+    ganadores = {}
+    for fila in cuadro2:
+        dia_desv = fila[1][0][1]
+        sens_dia.append(dia_desv)
+
+        tarde_desv = fila[1][1][1]
+        sens_tarde.append(tarde_desv)
+
+        noche_desv = fila[1][2][1]
+        sens_noche.append(noche_desv)
+
+        productos[fila[0]] = [dia_desv, tarde_desv, noche_desv]
+        ganadores[fila[0]] = fila[2]
+    
+    mayor_sensibilidad_dia = np.nanmax(list(map(lambda x: float(x), sens_dia)))
+    mayor_sensibilidad_tarde = np.nanmax(list(map(lambda x: float(x), sens_tarde)))
+    mayor_sensibilidad_noche = np.nanmax(list(map(lambda x: float(x), sens_noche)))
+
+    for i in productos:
+        sensibilidades = productos.get(i)
+        if sensibilidades == [mayor_sensibilidad_dia, mayor_sensibilidad_tarde, mayor_sensibilidad_noche]:
+            titulo2_1 = f"El producto cuyo precio tiene más variación en los tres periodos es {i}"
+        else:
+            titulo2_1 = ""
+    
+    titulos2_2 = []
+    for i in ganadores:
+        ganador = ganadores.get(i)
+        if ganador != "empate":
+            titulos2_2.append(f"El producto {i} es más barato en promedio en la {ganador}")
+
+    #titulo2_3 AUN NO HACER PORQUE NO ME SALE NADA
+
+    #Titulo3 
+    ganadores = []
+    for fila in cuadro3:
+        if fila[2]!="empate":
+            ganadores.append(fila[2])
+
+    mas_repetido = max(set(ganadores), key = ganadores.count)
+    titulo3 = f"{mas_repetido} tuvo el menor precio mínimo {ganadores.count(mas_repetido)} veces" 
+
+    #Titulo4 
+    ganadores = []
+    for fila in cuadro4:
+        if fila[2]!="empate":
+            ganadores.append(fila[2])
+
+    mas_repetido = max(set(ganadores), key = ganadores.count)
+    titulo4 = f"{mas_repetido} tuvo el mayor precio máximo {ganadores.count(mas_repetido)} veces" 
+
+    #Titulo 5
+    ganadores = []
+    for fila in cuadro5:
+        if fila[2]!="empate":
+            ganadores.append(fila[2])
+
+    mas_repetido = max(set(ganadores), key = ganadores.count)
+    titulo5 = f"{mas_repetido} tuvo el menor precio promedio {ganadores.count(mas_repetido)} veces" 
+
+    return titulo1, titulo2_1, titulos2_2, titulo3, titulo4, titulo5
 
 if __name__ == '__main__':
     app.run(debug=True)

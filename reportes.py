@@ -10,29 +10,38 @@ import numpy as np
 
 #cnx = mysql.connector.connect(host='neurometricslab.mysql.pythonanywhere-services.com', user='neurometricslab', password='pricemap', database='neurometricslab$default')
 
-price_evol = pd.read_csv("price_evolution.csv")
 
 #Me da todos los productos dentro de la bd mysql 
-'''cursor = cnx.cursor()
-cursor.execute('SELECT descripcion, sku_wong, sku_metro, sku_pv, sku_vivanda, sku_tottus FROM productos')
-data = cursor.fetchall()
-cuadro_tabla_1 = tabla1(data) #Devuelve una matriz de 2 dimensiones
-cnx.commit()
-'''
-#If data[0] == .... : 
-#   wong = price_evol[(price_evol["sku"] == data[1]) & (price_evol["retail"] == "wong")]
-#   metro = price_evol[(price_evol["sku"] == data[2]) & (price_evol["retail"] == "metro")]
-#   pv = price_evol[(price_evol["sku"] == data[3]) & (price_evol["retail"] == "plaza_vea")]
-#   vivanda = price_evol[(price_evol["sku"] == data[4]) & (price_evol["retail"] == "vivanda")]
-#   tottus = price_evol[(price_evol["sku"] == data[5]) & (price_evol["retail"] == "tottus")]
-#
-#   reporte = pd.concat([wong,metro,pv,vivanda,tottus], axis=0)
-#
-# ¿QUE HACER SI FALTAN DATOS? Rellenar con el promedio de los valores anteriores y posteriores + cercanos de la misma tienda
-# ¿TRABAJAR CON DATA DE MÁS DÍAS?, no habría problema, pero se cambiarian algunas tablas
-# 
-#
-#
+def inicio():
+    cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
+    cursor = cnx.cursor()
+    cursor.execute('SELECT descripcion, sku_wong, sku_metro, sku_pv, sku_vivanda, sku_tottus FROM productos')
+    data = cursor.fetchall()
+    cnx.commit()
+
+    cuadro_1 = tabla1(data)
+    np.save("cuadro_1", cuadro_1)
+
+    cuadro_1_1 = tabla1_1(data)
+    np.save("cuadro_1_1", cuadro_1_1)
+
+    cuadro2, cuadro2_chiquito = tabla2(data)
+    np.save("cuadro2", cuadro2)
+    np.save("cuadro2_chiquito", cuadro2_chiquito)
+
+    cuadro2_3 = tabla2_3(data)
+    np.save("cuadro2_3", cuadro2_3)
+
+    cuadro3 = tabla3(data)
+    np.save("cuadro3", cuadro3)
+
+    cuadro4 = tabla4(data)
+    np.save("cuadro4", cuadro4)
+
+    cuadro5 = tabla5(data)
+    np.save("./templates/cuadro5", cuadro5)
+
+    return 
 
 #Arroz extra costeño 5kg
 
@@ -61,24 +70,21 @@ def sieteDias():
     current_date = '{}-{}-{}'.format(year, month, day)
     return current_date
 
+#FUNCIONA
 def tabla1(data):
-    '''wong = price_evol[(price_evol["sku"] == "294661") & (price_evol["retail"] == "wong")]
-    metro = price_evol[(price_evol["sku"] == "294661") & (price_evol["retail"] == "metro")]
-    pv = price_evol[(price_evol["sku"] == "20280294") & (price_evol["retail"] == "plaza_vea")]
-    vivanda = price_evol[(price_evol["sku"] == "20280294") & (price_evol["retail"] == "vivanda")]
-    tottus = price_evol[(price_evol["sku"] == "42747310") & (price_evol["retail"] == "tottus")]'''
 
+    price_evol = pd.read_csv("price_evolution.csv")
 
     cuadro_tabla_1 = []
     current_date = sieteDias()
 
     for producto_fila in data:
 
-        wong = price_evol[(price_evol["sku"] == producto_fila[1]) & (price_evol["retail"] == "wong")]
-        metro = price_evol[(price_evol["sku"] == producto_fila[2]) & (price_evol["retail"] == "metro")]
-        pv = price_evol[(price_evol["sku"] == producto_fila[3]) & (price_evol["retail"] == "plaza_vea")]
-        vivanda = price_evol[(price_evol["sku"] == producto_fila[4]) & (price_evol["retail"] == "vivanda")]
-        tottus = price_evol[(price_evol["sku"] == producto_fila[5]) & (price_evol["retail"] == "tottus")]
+        wong = price_evol[(price_evol["sku"] == str(producto_fila[1])) & (price_evol["retail"] == "wong")]
+        metro = price_evol[(price_evol["sku"] == str(producto_fila[2])) & (price_evol["retail"] == "metro")]
+        pv = price_evol[(price_evol["sku"] == str(producto_fila[3])) & (price_evol["retail"] == "plaza_vea")]
+        vivanda = price_evol[(price_evol["sku"] == str(producto_fila[4])) & (price_evol["retail"] == "vivanda")]
+        tottus = price_evol[(price_evol["sku"] == str(producto_fila[5])) & (price_evol["retail"] == "tottus")]
 
         reporte = pd.concat([wong,metro,pv,vivanda,tottus], axis=0)
         #SOLO SE TRABAJA CON LA COLUMNA PRICE (ONLINE)
@@ -110,20 +116,21 @@ def tabla1(data):
 
     return cuadro_tabla_1
 
-#NO TIENE FILL NA, SI NO FUNCIONA CONSIDERAR ESTO
+#FUNCIONA
+#ORDEN: wong, metro, pv, vivanda, tottus
 def tabla1_1(data):
+    price_evol = pd.read_csv("price_evolution.csv")
     #TABLA 1.1 Y TABLA 1.2 (DIAPO 3)
     current_date = sieteDias()
 
     cuadro_tabla1_1 = []
-    fila_tabla1_1 = []
 
     for producto_fila in data:
-        wong = price_evol[(price_evol["sku"] == producto_fila[1]) & (price_evol["retail"] == "wong")]
-        metro = price_evol[(price_evol["sku"] == producto_fila[2]) & (price_evol["retail"] == "metro")]
-        pv = price_evol[(price_evol["sku"] == producto_fila[3]) & (price_evol["retail"] == "plaza_vea")]
-        vivanda = price_evol[(price_evol["sku"] == producto_fila[4]) & (price_evol["retail"] == "vivanda")]
-        tottus = price_evol[(price_evol["sku"] == producto_fila[5]) & (price_evol["retail"] == "tottus")]
+        wong = price_evol[(price_evol["sku"] == str(producto_fila[1])) & (price_evol["retail"] == "wong")]
+        metro = price_evol[(price_evol["sku"] == str(producto_fila[2])) & (price_evol["retail"] == "metro")]
+        pv = price_evol[(price_evol["sku"] == str(producto_fila[3])) & (price_evol["retail"] == "plaza_vea")]
+        vivanda = price_evol[(price_evol["sku"] == str(producto_fila[4])) & (price_evol["retail"] == "vivanda")]
+        tottus = price_evol[(price_evol["sku"] == str(producto_fila[5])) & (price_evol["retail"] == "tottus")]
 
         supermercados = [wong, metro, pv, vivanda, tottus]
 
@@ -154,26 +161,26 @@ def tabla1_1(data):
 
             estadisticos_x_super.append([promedio, maximo, minimo, sensibilidad, rango])
         
-        fila_tabla1_1.append([data[0], estadisticos_x_super])
+        cuadro_tabla1_1.append([producto_fila[0], estadisticos_x_super])
     
-    cuadro_tabla1_1.append(fila_tabla1_1)
-     
     return cuadro_tabla1_1
 
-#LA TABLA ESTA HECHA SIN EMBARGO AUN FALTA DETERMINAR LOS TITULOS DE 2.1 Y 2.2 (la tabla es la misma en 2, 2.1 , 2.2)
+#FUNCIONAAAAAAAA
 def tabla2(data):
     #MAÑANA -> 4 A 12 A TARDE -> 12 A 20 A NOCHE -> 20 A 4
+    price_evol = pd.read_csv("price_evolution.csv")
 
     current_date = sieteDias()
 
     cuadro_tabla_2 = []
+    para_cuadro_tabla_2_chiquito = []
     for producto_fila in data:
 
-        wong = price_evol[(price_evol["sku"] == producto_fila[1]) & (price_evol["retail"] == "wong")]
-        metro = price_evol[(price_evol["sku"] == producto_fila[2]) & (price_evol["retail"] == "metro")]
-        pv = price_evol[(price_evol["sku"] == producto_fila[3]) & (price_evol["retail"] == "plaza_vea")]
-        vivanda = price_evol[(price_evol["sku"] == producto_fila[4]) & (price_evol["retail"] == "vivanda")]
-        tottus = price_evol[(price_evol["sku"] == producto_fila[5]) & (price_evol["retail"] == "tottus")]
+        wong = price_evol[(price_evol["sku"] == str(producto_fila[1])) & (price_evol["retail"] == "wong")]
+        metro = price_evol[(price_evol["sku"] == str(producto_fila[2])) & (price_evol["retail"] == "metro")]
+        pv = price_evol[(price_evol["sku"] == str(producto_fila[3])) & (price_evol["retail"] == "plaza_vea")]
+        vivanda = price_evol[(price_evol["sku"] == str(producto_fila[4])) & (price_evol["retail"] == "vivanda")]
+        tottus = price_evol[(price_evol["sku"] == str(producto_fila[5])) & (price_evol["retail"] == "tottus")]
 
         reporte = pd.concat([wong,metro,pv,vivanda,tottus], axis=0)
         #SOLO SE TRABAJA CON LA COLUMNA PRICE (ONLINE)
@@ -186,7 +193,7 @@ def tabla2(data):
         #SI FUNCIONA
         reporte_dia = reporte.loc[(reporte['time'] >= '04:00') & (reporte['time'] < '12:00')]
         reporte_tarde = reporte.loc[(reporte['time'] >= '12:00') & (reporte['time'] < '20:00')]
-        reporte_noche = reporte.loc[(reporte['time'] >= '20:00') & (reporte['time'] < '04:00')]
+        reporte_noche = reporte.loc[(reporte['time'] < '04:00')]
 
         time = [reporte_dia, reporte_tarde, reporte_noche]
         
@@ -202,7 +209,7 @@ def tabla2(data):
             estadisticos_x_tiempo.append([promedio, sensibilidad])
         
         promedios = [i[0] for i in estadisticos_x_tiempo]
-        min_prom = np.min(promedios)
+        min_prom = np.nanmin(promedios)
 
         #Solo para encontrar si hay duplicado osea empate
         u, c = np.unique(promedios, return_counts=True)
@@ -219,18 +226,36 @@ def tabla2(data):
         #SI SALE FEO, COLOCARLE [] AL PERIODO+...
         cuadro_tabla_2.append([producto_fila[0], estadisticos_x_tiempo, periodo_mas_barato_prom])
 
-    return cuadro_tabla_2
+        #Esto es para la 2da tabla
+        lista_deviacion_x_hora =[desv[1] for desv in estadisticos_x_tiempo]
+        para_cuadro_tabla_2_chiquito.append(lista_deviacion_x_hora)
 
+    cuadro_tabla_2_chiquito_dia = [dia[0] for dia in para_cuadro_tabla_2_chiquito]
+    cuadro_tabla_2_chiquito_dia = np.round(np.mean(cuadro_tabla_2_chiquito_dia), 3)
+
+    cuadro_tabla_2_chiquito_tarde = [dia[1] for dia in para_cuadro_tabla_2_chiquito]
+    cuadro_tabla_2_chiquito_tarde = np.round(np.mean(cuadro_tabla_2_chiquito_tarde), 3)
+
+    cuadro_tabla_2_chiquito_noche = [dia[2] for dia in para_cuadro_tabla_2_chiquito]
+    cuadro_tabla_2_chiquito_noche = np.round(np.mean(cuadro_tabla_2_chiquito_noche), 3)
+
+    cuadro_tabla_2_chiquito = [cuadro_tabla_2_chiquito_dia, cuadro_tabla_2_chiquito_tarde, cuadro_tabla_2_chiquito_noche]
+
+    return cuadro_tabla_2, cuadro_tabla_2_chiquito
+
+#FUNCIONAAAAA
 def tabla2_3(data):
+    price_evol = pd.read_csv("price_evolution.csv")
+
     current_date = sieteDias()
     cuadro_tabla2_3 = []
     for producto_fila in data:
 
-        wong = price_evol[(price_evol["sku"] == producto_fila[1]) & (price_evol["retail"] == "wong")]
-        metro = price_evol[(price_evol["sku"] == producto_fila[2]) & (price_evol["retail"] == "metro")]
-        pv = price_evol[(price_evol["sku"] == producto_fila[3]) & (price_evol["retail"] == "plaza_vea")]
-        vivanda = price_evol[(price_evol["sku"] == producto_fila[4]) & (price_evol["retail"] == "vivanda")]
-        tottus = price_evol[(price_evol["sku"] == producto_fila[5]) & (price_evol["retail"] == "tottus")]
+        wong = price_evol[(price_evol["sku"] == str(producto_fila[1])) & (price_evol["retail"] == "wong")]
+        metro = price_evol[(price_evol["sku"] == str(producto_fila[2])) & (price_evol["retail"] == "metro")]
+        pv = price_evol[(price_evol["sku"] == str(producto_fila[3])) & (price_evol["retail"] == "plaza_vea")]
+        vivanda = price_evol[(price_evol["sku"] == str(producto_fila[4])) & (price_evol["retail"] == "vivanda")]
+        tottus = price_evol[(price_evol["sku"] == str(producto_fila[5])) & (price_evol["retail"] == "tottus")]
 
         reporte = pd.concat([wong,metro,pv,vivanda,tottus], axis=0)
         #SOLO SE TRABAJA CON LA COLUMNA PRICE (ONLINE)
@@ -243,7 +268,7 @@ def tabla2_3(data):
         #SI FUNCIONA
         reporte_dia = reporte.loc[(reporte['time'] >= '04:00') & (reporte['time'] < '12:00')]
         reporte_tarde = reporte.loc[(reporte['time'] >= '12:00') & (reporte['time'] < '20:00')]
-        reporte_noche = reporte.loc[(reporte['time'] >= '20:00') & (reporte['time'] < '04:00')]
+        reporte_noche = reporte.loc[(reporte['time'] < '04:00')]
 
         time = [reporte_dia, reporte_tarde, reporte_noche]
         
@@ -263,17 +288,20 @@ def tabla2_3(data):
     
     return cuadro_tabla2_3
 
+#FUNCIONAAAAAA
 def tabla3(data):
+    price_evol = pd.read_csv("price_evolution.csv")
+
     current_date = sieteDias()
 
     cuadro_tabla3= []
 
     for producto_fila in data:
-        wong = price_evol[(price_evol["sku"] == producto_fila[1]) & (price_evol["retail"] == "wong")]
-        metro = price_evol[(price_evol["sku"] == producto_fila[2]) & (price_evol["retail"] == "metro")]
-        pv = price_evol[(price_evol["sku"] == producto_fila[3]) & (price_evol["retail"] == "plaza_vea")]
-        vivanda = price_evol[(price_evol["sku"] == producto_fila[4]) & (price_evol["retail"] == "vivanda")]
-        tottus = price_evol[(price_evol["sku"] == producto_fila[5]) & (price_evol["retail"] == "tottus")]
+        wong = price_evol[(price_evol["sku"] == str(producto_fila[1])) & (price_evol["retail"] == "wong")]
+        metro = price_evol[(price_evol["sku"] == str(producto_fila[2])) & (price_evol["retail"] == "metro")]
+        pv = price_evol[(price_evol["sku"] == str(producto_fila[3])) & (price_evol["retail"] == "plaza_vea")]
+        vivanda = price_evol[(price_evol["sku"] == str(producto_fila[4])) & (price_evol["retail"] == "vivanda")]
+        tottus = price_evol[(price_evol["sku"] == str(producto_fila[5])) & (price_evol["retail"] == "tottus")]
 
         supermercados = [wong, metro, pv, vivanda, tottus]
 
@@ -290,7 +318,7 @@ def tabla3(data):
 
             minimos_x_super.append(minimo)
         
-        minimo_de_minimos = np.min(minimos_x_super)
+        minimo_de_minimos = np.nanmin(minimos_x_super)
 
         #Se hace para ver si hay empate
         if len(minimos_x_super) != len(set(minimos_x_super)):
@@ -306,22 +334,108 @@ def tabla3(data):
         elif minimo_de_minimos == minimos_x_super[4]:
             ultima_columna = "tottus"
 
-        cuadro_tabla3.append(minimos_x_super, ultima_columna)
-    
+        cuadro_tabla3.append([producto_fila[0],minimos_x_super, ultima_columna])
     return cuadro_tabla3
 
-def tabla3_1(data):
+#HACER DIAPO 9 Y 10, 12 (LA PARTE DE ABAJO NOMAS DE LA 12)
+
+#FUNCIONA
+def tabla4(data):
+    price_evol = pd.read_csv("price_evolution.csv")
+
     current_date = sieteDias()
 
-    for producto_fila in data:
+    cuadro_tabla4= []
 
-        wong = price_evol[(price_evol["sku"] == producto_fila[1]) & (price_evol["retail"] == "wong")]
-        metro = price_evol[(price_evol["sku"] == producto_fila[2]) & (price_evol["retail"] == "metro")]
-        pv = price_evol[(price_evol["sku"] == producto_fila[3]) & (price_evol["retail"] == "plaza_vea")]
-        vivanda = price_evol[(price_evol["sku"] == producto_fila[4]) & (price_evol["retail"] == "vivanda")]
-        tottus = price_evol[(price_evol["sku"] == producto_fila[5]) & (price_evol["retail"] == "tottus")]
+    for producto_fila in data:
+        wong = price_evol[(price_evol["sku"] == str(producto_fila[1])) & (price_evol["retail"] == "wong")]
+        metro = price_evol[(price_evol["sku"] == str(producto_fila[2])) & (price_evol["retail"] == "metro")]
+        pv = price_evol[(price_evol["sku"] == str(producto_fila[3])) & (price_evol["retail"] == "plaza_vea")]
+        vivanda = price_evol[(price_evol["sku"] == str(producto_fila[4])) & (price_evol["retail"] == "vivanda")]
+        tottus = price_evol[(price_evol["sku"] == str(producto_fila[5])) & (price_evol["retail"] == "tottus")]
 
         supermercados = [wong, metro, pv, vivanda, tottus]
 
-        return 'No see...'
+        #ESTA EN EL ORDEN DE SUPERMERCADOS
+        maximos_x_super = []
 
+        for supermercado in supermercados:
+            supermercado = supermercado.loc[supermercado["date"]>=current_date]
+            supermercado.drop("price_tarjeta", axis=1, inplace=True)
+            supermercado.drop("price_tienda", axis=1, inplace=True)
+
+            maximo = supermercado['price'].max()
+            maximo = np.round(maximo,2)
+
+            maximos_x_super.append(maximo)
+        
+        maximo_de_maximos = np.nanmax(maximos_x_super)
+
+        #Se hace para ver si hay empate
+        if len(maximos_x_super) != len(set(maximos_x_super)):
+            ultima_columna = "empate"
+        elif maximo_de_maximos == maximos_x_super[0]:
+            ultima_columna = "wong"
+        elif maximo_de_maximos == maximos_x_super[1]:
+            ultima_columna = "metro"
+        elif maximo_de_maximos == maximos_x_super[2]:
+            ultima_columna = "plaza vea"
+        elif maximo_de_maximos == maximos_x_super[3]:
+            ultima_columna = "vivanda"
+        elif maximo_de_maximos == maximos_x_super[4]:
+            ultima_columna = "tottus"
+
+        cuadro_tabla4.append([producto_fila[0],maximos_x_super, ultima_columna])
+    return cuadro_tabla4
+
+#FUNCIONA
+def tabla5(data):
+    price_evol = pd.read_csv("price_evolution.csv")
+
+    current_date = sieteDias()
+
+    cuadro_tabla5= []
+
+    for producto_fila in data:
+        wong = price_evol[(price_evol["sku"] == str(producto_fila[1])) & (price_evol["retail"] == "wong")]
+        metro = price_evol[(price_evol["sku"] == str(producto_fila[2])) & (price_evol["retail"] == "metro")]
+        pv = price_evol[(price_evol["sku"] == str(producto_fila[3])) & (price_evol["retail"] == "plaza_vea")]
+        vivanda = price_evol[(price_evol["sku"] == str(producto_fila[4])) & (price_evol["retail"] == "vivanda")]
+        tottus = price_evol[(price_evol["sku"] == str(producto_fila[5])) & (price_evol["retail"] == "tottus")]
+
+        supermercados = [wong, metro, pv, vivanda, tottus]
+
+        #ESTA EN EL ORDEN DE SUPERMERCADOS
+        promedios_x_super = []
+
+        for supermercado in supermercados:
+            supermercado = supermercado.loc[supermercado["date"]>=current_date]
+            supermercado.drop("price_tarjeta", axis=1, inplace=True)
+            supermercado.drop("price_tienda", axis=1, inplace=True)
+
+            maximo = supermercado['price'].mean()
+            maximo = np.round(maximo,2)
+
+            promedios_x_super.append(maximo)
+        
+        minimo_de_promedios = np.nanmin(promedios_x_super)
+
+        #Se hace para ver si hay empate
+        if len(promedios_x_super) != len(set(promedios_x_super)):
+            ultima_columna = "empate"
+        elif minimo_de_promedios == promedios_x_super[0]:
+            ultima_columna = "wong"
+        elif minimo_de_promedios == promedios_x_super[1]:
+            ultima_columna = "metro"
+        elif minimo_de_promedios == promedios_x_super[2]:
+            ultima_columna = "plaza vea"
+        elif minimo_de_promedios == promedios_x_super[3]:
+            ultima_columna = "vivanda"
+        elif minimo_de_promedios == promedios_x_super[4]:
+            ultima_columna = "tottus"
+
+        cuadro_tabla5.append([producto_fila[0],promedios_x_super, ultima_columna])
+    return cuadro_tabla5 
+
+
+print(inicio())
