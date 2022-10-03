@@ -58,7 +58,7 @@
                         <!-- Logo -->
                         <div class="col-xl-2 col-lg-2 col-md-2">
                             <div class="logo">
-                                <a href="https://pricemap.neurometrics.la"><img
+                                <a href="/dashboard"><img
                                         src="../static/img/logo/pricemap_logo.png" alt=""></a>
                             </div>
                         </div>
@@ -69,10 +69,17 @@
                             <div class="main-menu f-right d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a href="https://pixmap.io/" target="_blank">Productos</a></li>
-                                        <li><a href="https://pixmap.io/" target="_blank">Pricemap index</a></li>
-                                        <li><a href="https://pixmap.io/" target="_blank">Reportes</a></li>
-                                        <li><a href="https://pixmap.io/" target="_blank">FAQs</a></li>
+                                        <li><a href="/dashboard">Panel</a></li>
+                                        {% if "admin" in session %}
+                                            <li><a href="/usuarios">Usuario</a></li>
+                                        {% endif%}
+                                        <li><a href="#" class="no-disponible">Pricemap Index</a></li>
+                                        <li><a href="#">Reportes</a></li>
+                                        {% if "admin" in session %}
+                                            <li><a href="/admin">Logs</a></li>
+                                        {% endif%}
+
+                                        <li><a href="/faqs">FAQs</a></li>
                                         <li><a href="{{url_for('logout')}}">Cerrar sesión</a></li>
 
                                         <!--
@@ -103,45 +110,50 @@
     <div class="sidebar">
 
         <div id="myBtnContainer">
-            <button class="btn active" onclick="filterSelection('Reporte1')">NOMBRE REPORTE 1</button>
-            <button class="btn" onclick="filterSelection('Reporte2')">NOMBRE REPORTE 2</button>
-            <button class="btn" onclick="filterSelection('Reporte3')">NOMBRE REPORTE 3</button>
-            <button class="btn" onclick="filterSelection('Reporte4')">NOMBRE REPORTE 4</button>
-            <button class="btn" onclick="filterSelection('Reporte5')">NOMBRE REPORTE 5</button>
-            <button class="btn" onclick="filterSelection('Reporte6')">NOMBRE REPORTE 6</button>
-            <button class="btn" onclick="filterSelection('Reporte7')">NOMBRE REPORTE 7</button>
-            <button class="btn" onclick="filterSelection('Reporte8')">NOMBRE REPORTE 8</button>
+            <button class="btn active" onclick="filterSelection('Reporte1')">Producto más variable</button>
+            <button class="btn" onclick="filterSelection('Reporte2')">Tienda más variable</button>
+            <button class="btn" onclick="filterSelection('r3copia')">Variación por hora</button>
+            <button class="btn" onclick="filterSelection('Reporte4')">Momento más variable</button>
 
+            <button class="btn" onclick="filterSelection('Reporte3')">Momento más barato</button>
+
+
+            <!--<button class="btn" onclick="filterSelection('Reporte5')">NO UTILIZAR TODAVIA</button>-->
+
+            <button class="btn" onclick="filterSelection('Reporte6')">P. mínimos por tienda</button>
+            <button class="btn" onclick="filterSelection('Reporte7')">P. máximos por tienda</button>
+            <button class="btn" onclick="filterSelection('Reporte8')">P. promedios por tienda</button>
         </div>
     </div>
     <div class="grid-layout-reportes">
         <div class="agregar">
-            <h2 style="margin-top: 50px">Reportes estadísticos</h2>
+            <h2 style="margin-top: 50px">Reportes estadísticos última semana</h2>
         </div>
         <!-- CUADRO 1 -->
         <div class="filterDiv Reporte1">
             <div class="agregar">
                 <h4>¿Cuál es el producto más sensible en todo el mercado?</h4>
+                <p style="color: #707b8e;font-size: 13px;line-height: 1;">La sensibilidad/variación de los precios de los productos se mide con la desviación estándar. La desviación estándar representa en cuantos soles (S/) se desvían en promedio los precios registrados de un producto del precio promedio.</p>
             </div>
             <table id="data" class="table table-striped">
                 <thead>
                     <tr>
                         <th>PRODUCTOS</th>
-                        <th>PROMEDIO</th>
-                        <th>MÁXIMO</th>
-                        <th>MÍNIMO</th>
-                        <th>SENSIBLE</th>
-                        <th>RANGO</th>
+                        <th>SENSIBILIDAD (S/.)</th>
+                        <th>MÁXIMO (S/.)</th>
+                        <th>MÍNIMO (S/.)</th>
+                        <th>PROMEDIO (S/.)</th>
+                        <th>RANGO (S/.)</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for fila in cuadro_1 %}
                     <tr>
                         <td>{{fila.0}}</td>
-                        <td>{{fila.1}}</td>
+                        <td><b>{{fila.4}}</b></td>
                         <td>{{fila.2}}</td>
                         <td>{{fila.3}}</td>
-                        <td>{{fila.4}}</td>
+                        <td>{{fila.1}}</td>
                         <td>{{fila.5}}</td>
                     </tr>
                     {%endfor%}
@@ -157,45 +169,36 @@
             <div class="agregar">
                 <!-- Cuadro 1_1 -->
                 <h4>¿Qué tienda tuvo esta semana más productos con precios variables?</h4>
+                <p style="color: #707b8e;font-size: 13px;line-height: 1;">La sensibilidad/variación de los precios de los productos se mide con la desviación estándar. La desviación estándar representa en cuantos soles (S/) se desvían en promedio los precios registrados de un producto del precio promedio.</p>
             </div>
     
             <table id="data" class="table table-striped">
                 <thead>
                     <tr>
                         <th></th>
-                        <th colspan="5">WONG</th>
-                        <th colspan="5">METRO</th>
-                        <th colspan="5">PLAZA VEA</th>
-                        <th colspan="5">VIVANDA</th>
-                        <th colspan="5">TOTTUS</th>
+                        <th colspan="2">WONG</th>
+                        <th colspan="2">METRO</th>
+                        <th colspan="2">PLAZA VEA</th>
+                        <th colspan="2">VIVANDA</th>
+                        <th colspan="2">TOTTUS</th>
                     </tr>
                     <tr>
                         <th>PRODUCTOS</th>
-                        <th>Prom</th>
-                        <th>Máx</th>
-                        <th>Mín</th>
-                        <th>Desv</th>
-                        <th>Rango</th>
-                        <th>Prom</th>
-                        <th>Máx</th>
-                        <th>Mín</th>
-                        <th>Desv</th>
-                        <th>Rango</th>
-                        <th>Prom</th>
-                        <th>Máx</th>
-                        <th>Mín</th>
-                        <th>Desv</th>
-                        <th>Rango</th>
-                        <th>Prom</th>
-                        <th>Máx</th>
-                        <th>Mín</th>
-                        <th>Desv</th>
-                        <th>Rango</th>
-                        <th>Prom</th>
-                        <th>Máx</th>
-                        <th>Mín</th>
-                        <th>Desv</th>
-                        <th>Rango</th>
+
+                        <th>Sens. (S/.)</th>
+                        <th>Rango (S/.)</th>
+                        
+                        <th>Sens. (S/.)</th>
+                        <th>Rango (S/.)</th>
+                        
+                        <th>Sens. (S/.)</th>
+                        <th>Rango (S/.)</th>
+                        
+                        <th>Sens. (S/.)</th>
+                        <th>Rango (S/.)</th>
+                        
+                        <th>Sens. (S/.)</th>
+                        <th>Rango (S/.)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -204,34 +207,24 @@
                         <td>{{fila.0}}</td>
                         
                         <!-- fila[1][0] es wong-->
-                        <td>{{fila[1][0][0]}}</td>
-                        <td>{{fila[1][0][1]}}</td>
-                        <td>{{fila[1][0][2]}}</td>
-                        <td>{{fila[1][0][3]}}</td>
+                        
+                        <td><b>{{fila[1][0][3]}}</b></td>
                         <td>{{fila[1][0][4]}}</td>
     
-                        <td>{{fila[1][1][0]}}</td>
-                        <td>{{fila[1][1][1]}}</td>
-                        <td>{{fila[1][1][2]}}</td>
-                        <td>{{fila[1][1][3]}}</td>
+                        
+                        <td><b>{{fila[1][1][3]}}</b></td>
                         <td>{{fila[1][1][4]}}</td>
                         
-                        <td>{{fila[1][2][0]}}</td>
-                        <td>{{fila[1][2][1]}}</td>
-                        <td>{{fila[1][2][2]}}</td>
-                        <td>{{fila[1][2][3]}}</td>
+                        
+                        <td><b>{{fila[1][2][3]}}</b></td>
                         <td>{{fila[1][2][4]}}</td>
                         
-                        <td>{{fila[1][3][0]}}</td>
-                        <td>{{fila[1][3][1]}}</td>
-                        <td>{{fila[1][3][2]}}</td>
-                        <td>{{fila[1][3][3]}}</td>
+                        
+                        <td><b>{{fila[1][3][3]}}</b></td>
                         <td>{{fila[1][3][4]}}</td>
                         
-                        <td>{{fila[1][4][0]}}</td>
-                        <td>{{fila[1][4][1]}}</td>
-                        <td>{{fila[1][4][2]}}</td>
-                        <td>{{fila[1][4][3]}}</td>
+                        
+                        <td><b>{{fila[1][4][3]}}</b></td>
                         <td>{{fila[1][4][4]}}</td>
                     </tr>
                     {%endfor%}
@@ -246,7 +239,8 @@
         <div class="filterDiv Reporte3">
             <div class="agregar">
                 <!-- Cuadro 2 -->
-                <h4>¿Qué producto varía más en cada periodo del día?</h4>
+                <h4>¿Qué momento del día los productos son más baratos?</h4>
+                <p style="color: #707b8e;font-size: 13px;line-height: 1;">La sensibilidad/variación de los precios de los productos se mide con la desviación estándar. La desviación estándar representa en cuantos soles (S/) se desvían en promedio los precios registrados de un producto del precio promedio.</p>
             </div>
     
             <table id="data" class="table table-striped">
@@ -259,13 +253,15 @@
                     </tr>
                     <tr>
                         <th>Productos</th>
-                        <th>Promedio</th>
-                        <th>Desviación</th>
-                        <th>Promedio</th>
-                        <th>Desviación</th>
-                        <th>Promedio</th>
-                        <th>Desviación</th>
-                        <th>Precio más barato en promedio</th>
+                        <th>Sensibilidad (S/.)</th>
+
+                        <th>Promedio (S/.)</th>
+                        <th>Sensibilidad (S/.)</th>
+
+                        <th>Promedio (S/.)</th>
+                        <th>Sensibilidad (S/.)</th>
+
+                        <th>Promedio (S/.)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -274,25 +270,91 @@
                     {%for fila in cuadro2%}
                     <tr>
                         <td>{{fila.0}}</td>
-                        <td>{{fila[1][0][0]}}</td>
+                        
                         <td>{{fila[1][0][1]}}</td>
+                        <td><b>{{fila[1][0][0]}}</b></td>
     
-                        <td>{{fila[1][1][0]}}</td>
                         <td>{{fila[1][1][1]}}</td>
+                        <td><b>{{fila[1][1][0]}}</b></td>
     
-                        <td>{{fila[1][2][0]}}</td>
                         <td>{{fila[1][2][1]}}</td>
+                        <td><b>{{fila[1][2][0]}}</b></td>
     
-                        <td>{{fila.2}}</td>
                     </tr>
                     {%endfor%}
                 </tbody>
             </table>
             <div class="agregar">
-                <p>{{titulo2_1}}</p>
+                <ul>
                 {% for i in titulos2_2 %}
-                    <p>{{i}}</p>
+                    <li style="
+                    list-style: square;
+                    margin-bottom: 10px;
+                ">{{i}}</li>
                 {%endfor%}
+                </ul>
+                <p>Los productos no mencionados cuestan en promedio lo mismo en los diferentes momentos del día</p>
+            </div>
+        </div>
+
+        <div class="filterDiv r3copia">
+            <div class="agregar">
+                <!-- Cuadro 2 -->
+                <h4>¿Qué producto varía más en cada momento del día?</h4>
+                <p style="color: #707b8e;font-size: 13px;line-height: 1;">La sensibilidad/variación de los precios de los productos se mide con la desviación estándar. La desviación estándar representa en cuantos soles (S/) se desvían en promedio los precios registrados de un producto del precio promedio.</p>
+            </div>
+    
+            <table id="data" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th colspan="2">Mañana</th>
+                        <th colspan="2">Tarde</th>
+                        <th colspan="2">Noche</th>
+                    </tr>
+                    <tr>
+                        <th>Productos</th>
+                        <th>Sensibilidad (S/.)</th>
+
+                        <th>Promedio (S/.)</th>
+                        <th>Sensibilidad (S/.)</th>
+
+                        <th>Promedio (S/.)</th>
+                        <th>Sensibilidad (S/.)</th>
+
+                        <th>Promedio (S/.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+    
+                    {%for fila in cuadro2%}
+                    <tr>
+                        <td>{{fila.0}}</td>
+                        
+                        <td><b>{{fila[1][0][1]}}</b></td>
+                        <td>{{fila[1][0][0]}}</td>
+    
+                        <td><b>{{fila[1][1][1]}}</b></td>
+                        <td>{{fila[1][1][0]}}</td>
+    
+                        <td><b>{{fila[1][2][1]}}</b></td>
+                        <td>{{fila[1][2][0]}}</td>
+    
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+            <div class="agregar">
+                <ul>
+                {% for i in titulo2_1 %}
+                    <li style="
+                    list-style: square;
+                    margin-bottom: 10px;
+                ">{{i}}</li>
+                {%endfor%}
+                </ul>
+                <p>Los productos no mencionados varían en promedio lo mismo en los diferentes momentos del día</p>
             </div>
         </div>
         
@@ -300,41 +362,42 @@
             <div class="agregar">
                 <!-- Cuadro 2 chiquito -->
                 <h4>¿Cuáles son los momentos del día con más variación de precios entre todas las tiendas? </h4>
+                <p style="color: #707b8e;font-size: 13px;line-height: 1;">La sensibilidad/variación de los precios de los productos se mide con la desviación estándar. La desviación estándar representa en cuantos soles (S/) se desvían en promedio los precios registrados de un producto del precio promedio.</p>
             </div>
     
             <table id="data" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>PERIODO</th>
-                        <th>Mañana</th>
-                        <th>Tarde</th>
-                        <th>Noche</th>
+                        <th>INDICADOR</th>
+                        <th>Mañana (S/.)</th>
+                        <th>Tarde (S/.)</th>
+                        <th>Noche (S/.)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Desviación estándar promedio</td>
-                        <td>{{cuadro2_chiquito.0}}</td>
-                        <td>{{cuadro2_chiquito.1}}</td>
-                        <td>{{cuadro2_chiquito.2}}</td>
+                        <td>{{cuadro2_chiquito.0|round(4,'floor')}}</td>
+                        <td>{{cuadro2_chiquito.1|round(4,'floor')}}</td>
+                        <td>{{cuadro2_chiquito.2|round(4,'floor')}}</td>
                     </tr>
                 </tbody>
             </table>
     
             <div class="agregar">
                 {%if cuadro2_chiquito|max == cuadro2_chiquito.0%}
-                    <p>En la mañana los productos se desvían en promedio un poco más de sus precios promedio que en la tarde y en la noche</p>
+                    <p>En la <b>mañana</b> los productos se desvían en promedio un poco más de sus precios promedio que en la tarde y en la noche</p>
                 {%elif cuadro2_chiquito|max == cuadro2_chiquito.1 %}
-                    <p>En la tarde los productos se desvían en promedio un poco más de sus precios promedio que en la mañana y en la noche</p>
+                    <p>En la <b>tarde</b> los productos se desvían en promedio un poco más de sus precios promedio que en la mañana y en la noche</p>
                 {%else%}
-                    <p>En la noche los productos se desvían en promedio un poco más de sus precios promedio que en la mañana y en la tarde</p>
+                    <p>En la <b>noche</b> los productos se desvían en promedio un poco más de sus precios promedio que en la mañana y en la tarde</p>
                 {%endif%}
             </div>
         </div>
         
+        <!--CUADRO 2_3
         <div class="filterDiv Reporte5">
             <div class="agregar">
-                <!-- Cuadro 2_3 -->
                 <h4>¿En qué momento del día se registraron los precios más bajos y más altos por producto?</h4>
             </div>
     
@@ -377,11 +440,12 @@
                 {%endfor%}
             </div>
         </div>
-        
+        -->
+
         <div class="filterDiv Reporte6">
             <div class="agregar">
                 <!-- Cuadro 3 -->
-                <h4>¿Qué tienda ha registrado más veces los precios más bajos?</h4>
+                <h4>¿Qué tienda registró los precios más bajos en más productos?</h4>
             </div>
     
             <!-- TABLE 3 -->
@@ -395,7 +459,6 @@
                         <th>Plaza Vea</th>
                         <th>Vivanda</th>
                         <th>Tottus</th>
-                        <th>¿Quién tuvo el menor mínimo?</th>
                     </tr>
                 </thead>
                 <tbody>                
@@ -403,13 +466,32 @@
                     <tr>
                         <td>{{fila.0}}</td>
     
-                        <td>{{fila[1][0]}}</td>
-                        <td>{{fila[1][1]}}</td>
-                        <td>{{fila[1][2]}}</td>
-                        <td>{{fila[1][3]}}</td>
-                        <td>{{fila[1][4]}}</td>
+                        <td
+                        {%if fila[1][0] == fila[1]|nanmin%}
+                        class="negrita"
+                        {%endif%}
+                        >s/. {{fila[1][0]}}</td>
+
+                        <td 
+                        {%if fila[1][1] == fila[1]|nanmin%}
+                            class="negrita"
+                        {%endif%}>s/. {{fila[1][1]}}</td>
+
+                        <td
+                        {%if fila[1][2] == fila[1]|nanmin%}
+                        class="negrita"
+                        {%endif%}>s/. {{fila[1][2]}}</td>
+
+                        <td
+                        {%if fila[1][3] == fila[1]|nanmin%}
+                        class="negrita"
+                        {%endif%}>s/. {{fila[1][3]}}</td>
+
+                        <td
+                        {%if fila[1][4] == fila[1]|nanmin%}
+                        class="negrita"
+                        {%endif%}>s/. {{fila[1][4]}}</td>
     
-                        <td>{{fila[2]}}</td>
                     </tr>
                     {%endfor%}
                 </tbody>
@@ -422,7 +504,7 @@
         <div class="filterDiv Reporte7">
             <div class="agregar">
                 <!-- Cuadro 4 -->
-                <h4>¿Qué tienda ha registrado más veces los precios más altos?</h4>
+                <h4>¿Qué tienda registró los precios más altos en más productos?</h4>
             </div>
             <!-- TABLE 4 -->
             <table id="data" class="table table-striped">
@@ -434,7 +516,6 @@
                         <th>Plaza Vea</th>
                         <th>Vivanda</th>
                         <th>Tottus</th>
-                        <th>¿Quién tuvo el mayor máximo?</th>
                     </tr>
                 </thead>
                 <tbody>                
@@ -442,13 +523,32 @@
                     <tr>
                         <td>{{fila.0}}</td>
     
-                        <td>{{fila[1][0]}}</td>
-                        <td>{{fila[1][1]}}</td>
-                        <td>{{fila[1][2]}}</td>
-                        <td>{{fila[1][3]}}</td>
-                        <td>{{fila[1][4]}}</td>
+                        <td
+                        {%if fila[1][0] == fila[1]|nanmax%}
+                        class="negrita"
+                        {%endif%}
+                        >s/. {{fila[1][0]}}</td>
+
+                        <td 
+                        {%if fila[1][1] == fila[1]|nanmax%}
+                            class="negrita"
+                        {%endif%}>s/. {{fila[1][1]}}</td>
+
+                        <td
+                        {%if fila[1][2] == fila[1]|nanmax%}
+                        class="negrita"
+                        {%endif%}>s/. {{fila[1][2]}}</td>
+
+                        <td
+                        {%if fila[1][3] == fila[1]|nanmax%}
+                        class="negrita"
+                        {%endif%}>s/. {{fila[1][3]}}</td>
+
+                        <td
+                        {%if fila[1][4] == fila[1]|nanmax%}
+                        class="negrita"
+                        {%endif%}>s/. {{fila[1][4]}}</td>
     
-                        <td>{{fila[2]}}</td>
                     </tr>
                     {%endfor%}
                 </tbody>
@@ -461,7 +561,7 @@
         <div class="filterDiv Reporte8">
             <div class="agregar">
                 <!-- Cuadro 5 -->
-                <h4>¿Qué tienda tiene en promedio los precios más bajos?</h4>
+                <h4>¿Qué tienda cuenta con los precios promedios más bajos en más productos?</h4>
             </div>
             <!-- TABLE 5 -->
             <table id="data" class="table table-striped">
@@ -473,7 +573,6 @@
                         <th>Plaza Vea</th>
                         <th>Vivanda</th>
                         <th>Tottus</th>
-                        <th>¿Quién tuvo el menor promedio?</th>
                     </tr>
                 </thead>
                 <tbody>                
@@ -481,13 +580,33 @@
                     <tr>
                         <td>{{fila.0}}</td>
     
-                        <td>{{fila[1][0]}}</td>
-                        <td>{{fila[1][1]}}</td>
-                        <td>{{fila[1][2]}}</td>
-                        <td>{{fila[1][3]}}</td>
-                        <td>{{fila[1][4]}}</td>
+                        <td
+                        {%if fila[1][0] == fila[1]|nanmin%}
+                        class="negrita"
+                        {%endif%}
+                        >s/. {{fila[1][0]}}</td>
+
+                        <td 
+                        {%if fila[1][1] == fila[1]|nanmin%}
+                            class="negrita"
+                        {%endif%}>s/. {{fila[1][1]}}</td>
+
+                        <td
+                        {%if fila[1][2] == fila[1]|nanmin%}
+                        class="negrita"
+                        {%endif%}>s/. {{fila[1][2]}}</td>
+
+                        <td
+                        {%if fila[1][3] == fila[1]|nanmin%}
+                        class="negrita"
+                        {%endif%}>s/. {{fila[1][3]}}</td>
+
+                        <td
+                        {%if fila[1][4] == fila[1]|nanmin%}
+                        class="negrita"
+                        {%endif%}>
+                        s/. {{fila[1][4]}}</td>
     
-                        <td>{{fila[2]}}</td>
                     </tr>
                     {%endfor%}
                 </tbody>

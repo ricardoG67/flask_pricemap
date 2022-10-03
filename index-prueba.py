@@ -10,7 +10,7 @@ import timeit
 
 app = Flask(__name__)
 
-cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
+#cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
 bcrypt = Bcrypt(app)
 
 # SESION
@@ -261,6 +261,7 @@ def update(id):
 @app.route('/reportes')
 def reportes():
     
+    #SE CAMBIA ESTO
     cuadro_1 = np.load("cuadro_1.npy")
     cuadro_1_1 = np.load("cuadro_1_1.npy", allow_pickle=True)
     cuadro2= np.load("cuadro2.npy", allow_pickle=True)  
@@ -278,6 +279,8 @@ def reportes():
     titulo4=titulo4, titulo5=titulo5)
 
 def titulos_reportes():
+
+    #SE CAMBIA ESTO
     cuadro_1 = np.load("cuadro_1.npy")
     cuadro_1_1 = np.load("cuadro_1_1.npy", allow_pickle=True)
     cuadro2= np.load("cuadro2.npy", allow_pickle=True)  
@@ -295,7 +298,7 @@ def titulos_reportes():
     
     mayor_sensibilidad = np.nanmax(list(map(lambda x: float(x), sensibilidad)))
     mayor_sensibilidad = productos.get(str(mayor_sensibilidad))
-    titulo1 = f"El producto más sensible en todo el mercado es {mayor_sensibilidad}"
+    titulo1 = f'El producto más sensible en todo el mercado es "{mayor_sensibilidad}"'
 
     #Titulo 1_1 (FALTA)
     #titulo 1_2
@@ -349,23 +352,25 @@ def titulos_reportes():
 
         productos[fila[0]] = [dia_desv, tarde_desv, noche_desv]
         ganadores[fila[0]] = fila[2]
-    
-    mayor_sensibilidad_dia = np.nanmax(list(map(lambda x: float(x), sens_dia)))
-    mayor_sensibilidad_tarde = np.nanmax(list(map(lambda x: float(x), sens_tarde)))
-    mayor_sensibilidad_noche = np.nanmax(list(map(lambda x: float(x), sens_noche)))
 
+    titulo2_1 = []
     for i in productos:
         sensibilidades = productos.get(i)
-        if sensibilidades == [mayor_sensibilidad_dia, mayor_sensibilidad_tarde, mayor_sensibilidad_noche]:
-            titulo2_1 = f"El producto cuyo precio tiene más variación en los tres periodos es {i}"
-        else:
-            titulo2_1 = ""
-    
+        mayor = np.nanmax(list(map(lambda x: float(x), sensibilidades)))
+
+        if len(set(sensibilidades))!=1:
+            if mayor == sensibilidades[0]:
+                titulo2_1.append(f'El producto "{i}" tiene más variación de precios en la mañana')
+            elif mayor == sensibilidades[1]:
+                titulo2_1.append(f'El producto "{i}" tiene más variación de precios en la tarde')
+            elif mayor == sensibilidades[2]:
+                titulo2_1.append(f'El producto "{i}" tiene más variación de precios en la noche')
+
     titulos2_2 = []
     for i in ganadores:
         ganador = ganadores.get(i)
         if ganador != "empate":
-            titulos2_2.append(f"El producto {i} es más barato en promedio en la {ganador}")
+            titulos2_2.append(f'El producto "{i}" es más barato en promedio en la {ganador}')
 
     #titulo2_3 
     productos ={}
@@ -381,25 +386,25 @@ def titulos_reportes():
         if len(set(listas[0])) != 1:
             minimo = np.nanmin(listas[0])
             if minimo == listas[0][0]:
-                titulo2_3 = f"{i} registró sus precios más bajos durante la mañana"
+                titulo2_3 = f'"{i}" registró sus precios más bajos durante la mañana'
                 titulos2_3.append(titulo2_3)
             elif minimo == listas[0][1]:
-                titulo2_3 = f"{i} registró sus precios más bajos durante la tarde"
+                titulo2_3 = f'"{i}" registró sus precios más bajos durante la tarde'
                 titulos2_3.append(titulo2_3)
             elif minimo == listas[0][2]:
-                titulo2_3 = f"{i} registró sus precios más bajos durante la noche"
+                titulo2_3 = f'"{i}" registró sus precios más bajos durante la noche'
                 titulos2_3.append(titulo2_3)
 
         if len(set(listas[1])) != 1:
             maximo = np.nanmax(listas[1])
             if maximo == listas[1][0]:
-                titulo2_3 = f"{i} registró sus precios más altos durante la mañana"
+                titulo2_3 = f'"{i}" registró sus precios más altos durante la mañana'
                 titulos2_3.append(titulo2_3)
             elif maximo == listas[1][1]:
-                titulo2_3 = f"{i} registró sus precios más altos durante la tarde"
+                titulo2_3 = f'"{i}" registró sus precios más altos durante la tarde'
                 titulos2_3.append(titulo2_3)
             elif maximo == listas[1][2]:
-                titulo2_3 = f"{i} registró sus precios más altos durante la noche"
+                titulo2_3 = f'"{i}" registró sus precios más altos durante la noche'
                 titulos2_3.append(titulo2_3)
 
     #Titulo3 
@@ -427,9 +432,18 @@ def titulos_reportes():
             ganadores.append(fila[2])
 
     mas_repetido = max(set(ganadores), key = ganadores.count)
+
     titulo5 = f"{mas_repetido} tuvo el menor precio promedio {ganadores.count(mas_repetido)} veces" 
 
     return titulo1, titulo1_1, titulo2_1, titulos2_2, titulos2_3, titulo3, titulo4, titulo5
+
+@app.template_filter('nanmin')
+def minimo_numpy(value):
+    return np.nanmin(value)
+
+@app.template_filter('nanmax')
+def maximo_numpy(value):
+    return np.nanmax(value)
 
 if __name__ == '__main__':
     app.run(debug=True)

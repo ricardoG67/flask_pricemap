@@ -21,6 +21,10 @@
     -webkit-border-vertical-spacing: 0;
 }
 
+.sidebar{
+    width: 14%;
+}
+
 table{
     font-size: 11px;
 }
@@ -63,4 +67,13 @@ hr {border:0;border-top:1px solid #555;margin:0;height:1px;}
 .show{
     display: flex;
     flex-direction: column;
+}
+
+p{
+    margin-bottom: 8px;
+    color: black;
+}
+
+.negrita{
+    font-weight: bold;
 }

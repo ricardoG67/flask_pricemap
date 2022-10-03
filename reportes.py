@@ -13,12 +13,14 @@ import numpy as np
 
 #Me da todos los productos dentro de la bd mysql 
 def inicio():
-    cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
+    #Se cambia esto
+    cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap') #se hace con todos los graficos que tenemos
     cursor = cnx.cursor()
     cursor.execute('SELECT descripcion, sku_wong, sku_metro, sku_pv, sku_vivanda, sku_tottus FROM productos')
     data = cursor.fetchall()
     cnx.commit()
 
+    #SE CAMBIA ESTO
     cuadro_1 = tabla1(data)
     np.save("cuadro_1", cuadro_1)
 
@@ -73,6 +75,7 @@ def sieteDias():
 #FUNCIONA
 def tabla1(data):
 
+    #SE CAMBIA ESTO
     price_evol = pd.read_csv("price_evolution.csv")
 
     cuadro_tabla_1 = []
@@ -119,6 +122,7 @@ def tabla1(data):
 #FUNCIONA
 #ORDEN: wong, metro, pv, vivanda, tottus
 def tabla1_1(data):
+    #SE CAMBIA ESTO
     price_evol = pd.read_csv("price_evolution.csv")
     #TABLA 1.1 Y TABLA 1.2 (DIAPO 3)
     current_date = sieteDias()
@@ -168,6 +172,7 @@ def tabla1_1(data):
 #FUNCIONAAAAAAAA
 def tabla2(data):
     #MAÑANA -> 4 A 12 A TARDE -> 12 A 20 A NOCHE -> 20 A 4
+    #SE MCAMBNIA ESTO
     price_evol = pd.read_csv("price_evolution.csv")
 
     current_date = sieteDias()
@@ -245,6 +250,7 @@ def tabla2(data):
 
 #FUNCIONAAAAA
 def tabla2_3(data):
+    #SE CAMBIA ESTO
     price_evol = pd.read_csv("price_evolution.csv")
 
     current_date = sieteDias()
@@ -290,6 +296,8 @@ def tabla2_3(data):
 
 #FUNCIONAAAAAA
 def tabla3(data):
+    #SE CAMBIA ESTO
+
     price_evol = pd.read_csv("price_evolution.csv")
 
     current_date = sieteDias()
@@ -341,6 +349,8 @@ def tabla3(data):
 
 #FUNCIONA
 def tabla4(data):
+    #SE CAMBIA ESTO
+
     price_evol = pd.read_csv("price_evolution.csv")
 
     current_date = sieteDias()
@@ -390,6 +400,8 @@ def tabla4(data):
 
 #FUNCIONA
 def tabla5(data):
+    #SE CAMBIA ESTO
+
     price_evol = pd.read_csv("price_evolution.csv")
 
     current_date = sieteDias()
@@ -437,5 +449,4 @@ def tabla5(data):
         cuadro_tabla5.append([producto_fila[0],promedios_x_super, ultima_columna])
     return cuadro_tabla5 
 
-
-print(inicio())
+inicio()
