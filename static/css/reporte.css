@@ -77,3 +77,7 @@ p{
 .negrita{
     font-weight: bold;
 }
+
+.centreado{
+    text-align: center;
+}
