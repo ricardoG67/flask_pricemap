@@ -102,11 +102,11 @@
 
     <div class="logs">
         <div class="agregar">
-            <h2>Reportes estadisticos</h2>
+            <h2>Reportes estadísticos</h2>
         </div>
-
+        <!-- CUADRO 1 -->
         <div class="agregar">
-            <h4>Cuadro 1</h4>
+            <h4>¿Cuál es el producto más sensible en todo el mercado?</h4>
         </div>
         <table id="data" class="table table-striped">
             <thead>
@@ -137,7 +137,8 @@
             <p>{{titulo1}}</p>
         </div>
         <div class="agregar">
-            <h4>Cuadro 1_1</h4>
+            <!-- Cuadro 1_1 -->
+            <h4>¿Qué tienda tuvo esta semana más productos con precios variables?</h4>
         </div>
 
         <table id="data" class="table table-striped">
@@ -180,7 +181,6 @@
                 </tr>
             </thead>
             <tbody>
-                
                 {% for fila in cuadro_1_1 %}
                 <tr>
                     <td>{{fila.0}}</td>
@@ -221,10 +221,11 @@
         </table>
 
         <div class="agregar">
-            <p>SOY UN TITULAR DE LA TABLA DE ARRIBA</p>
+            <p>{{titulo1_1}}</p>
         </div>
         <div class="agregar">
-            <h4>Cuadro 2</h4>
+            <!-- Cuadro 2 -->
+            <h4>¿Qué producto varía más en cada periodo del día?</h4>
         </div>
 
         <table id="data" class="table table-striped">
@@ -273,7 +274,8 @@
             {%endfor%}
         </div>
         <div class="agregar">
-            <h4>Cuadro 2 chiquito</h4>
+            <!-- Cuadro 2 chiquito -->
+            <h4>¿Cuáles son los momentos del día con más variación de precios entre todas las tiendas? </h4>
         </div>
 
         <table id="data" class="table table-striped">
@@ -287,7 +289,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Desviacion estandar promedio</td>
+                    <td>Desviación estándar promedio</td>
                     <td>{{cuadro2_chiquito.0}}</td>
                     <td>{{cuadro2_chiquito.1}}</td>
                     <td>{{cuadro2_chiquito.2}}</td>
@@ -305,7 +307,8 @@
             {%endif%}
         </div>
         <div class="agregar">
-            <h4>Cuadro 2_3</h4>
+            <!-- Cuadro 2_3 -->
+            <h4>¿En qué momento del día se registraron los precios más bajos y más altos por producto?</h4>
         </div>
 
         <table id="data" class="table table-striped">
@@ -342,10 +345,13 @@
             </tbody>
         </table>
         <div class="agregar">
-            <p>SOY UN TITULAR DE LA TABLA DE ARRIBA</p>
+            {%for i in titulos2_3 %}
+                <p>{{i}}</p>
+            {%endfor%}
         </div>
         <div class="agregar">
-            <h4>Cuadro 3</h4>
+            <!-- Cuadro 3 -->
+            <h4>¿Qué tienda ha registrado más veces los precios más bajos?</h4>
         </div>
 
         <!-- TABLE 3 -->
@@ -382,7 +388,8 @@
             <p>{{titulo3|capitalize}}</p>
         </div>
         <div class="agregar">
-            <h4>Cuadro 4</h4>
+            <!-- Cuadro 4 -->
+            <h4>¿Qué tienda ha registrado más veces los precios más altos?</h4>
         </div>
         <!-- TABLE 4 -->
         <table id="data" class="table table-striped">
@@ -417,7 +424,8 @@
             <p>{{titulo4|capitalize}}</p>
         </div>
         <div class="agregar">
-            <h4>Cuadro 5</h4>
+            <!-- Cuadro 5 -->
+            <h4>¿Qué tienda tiene en promedio los precios más bajos?</h4>
         </div>
         <!-- TABLE 5 -->
         <table id="data" class="table table-striped">

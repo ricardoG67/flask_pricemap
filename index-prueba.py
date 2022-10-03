@@ -270,14 +270,21 @@ def reportes():
     cuadro4 = np.load("cuadro4.npy", allow_pickle=True)
     cuadro5 = np.load("cuadro5.npy", allow_pickle=True)
 
-    titulo1, titulo2_1, titulos2_2, titulo3, titulo4, titulo5 = titulos_reportes(cuadro_1, cuadro2, cuadro3, cuadro4, cuadro5)
+    titulo1, titulo1_1, titulo2_1, titulos2_2, titulos2_3, titulo3, titulo4, titulo5 = titulos_reportes()
 
-    return render_template('reportes.html', cuadro_1 = cuadro_1, cuadro_1_1 = cuadro_1_1, cuadro2 = cuadro2,
+    return render_template('reportes2.html', cuadro_1 = cuadro_1, cuadro_1_1 = cuadro_1_1, cuadro2 = cuadro2,
     cuadro2_chiquito = cuadro2_chiquito, cuadro2_3 = cuadro2_3, cuadro3 = cuadro3, cuadro4=cuadro4, cuadro5 = cuadro5,
-    titulo1=titulo1, titulo2_1=titulo2_1, titulos2_2=titulos2_2, titulo3=titulo3, titulo4=titulo4, titulo5=titulo5)
+    titulo1=titulo1, titulo1_1=titulo1_1, titulo2_1=titulo2_1, titulos2_2=titulos2_2, titulos2_3 = titulos2_3, titulo3=titulo3, 
+    titulo4=titulo4, titulo5=titulo5)
 
-def titulos_reportes(cuadro_1, cuadro2, cuadro3, cuadro4, cuadro5):
-
+def titulos_reportes():
+    cuadro_1 = np.load("cuadro_1.npy")
+    cuadro_1_1 = np.load("cuadro_1_1.npy", allow_pickle=True)
+    cuadro2= np.load("cuadro2.npy", allow_pickle=True)  
+    cuadro2_3 = np.load("cuadro2_3.npy", allow_pickle=True)
+    cuadro3 = np.load("cuadro3.npy", allow_pickle=True)
+    cuadro4 = np.load("cuadro4.npy", allow_pickle=True)
+    cuadro5 = np.load("cuadro5.npy", allow_pickle=True)
     #TITULOS
     #Titulo 1:
     sensibilidad = []
@@ -291,6 +298,37 @@ def titulos_reportes(cuadro_1, cuadro2, cuadro3, cuadro4, cuadro5):
     titulo1 = f"El producto más sensible en todo el mercado es {mayor_sensibilidad}"
 
     #Titulo 1_1 (FALTA)
+    #titulo 1_2
+    pv = []
+    wong = []
+    tottus = []
+    vivanda = []
+    metro = []
+    for fila in cuadro_1_1:
+        wong.append(fila[1][0][3])
+        metro.append(fila[1][1][3])
+        pv.append(fila[1][2][3])
+        vivanda.append(fila[1][3][3])
+        tottus.append(fila[1][4][3])
+    
+    desv_wong = sum(wong)
+    desv_metro = sum(metro)
+    desv_pv = sum(pv)
+    desv_tottus = sum(tottus)
+    desv_vivanda = sum(vivanda)
+
+    maximo = np.nanmax([desv_wong, desv_metro, desv_pv, desv_tottus, desv_vivanda])
+
+    if maximo == desv_wong:
+        titulo1_1 = f"Wong tuvo más productos con precios variables"
+    elif maximo == desv_metro:
+        titulo1_1 = f"Metro tuvo más productos con precios variables"
+    elif maximo == desv_pv:
+        titulo1_1 = f"Plaza vea tuvo más productos con precios variables"
+    elif maximo == desv_tottus:
+        titulo1_1 = f"Tottus tuvo más productos con precios variables"
+    elif maximo == desv_vivanda:
+        titulo1_1 = f"Vivanda tuvo más productos con precios variables"
 
     #Titulo 2 (HACERLO EN EL HTML Ver máxima desviación en cuadro chiquito)
     #Titulo 2_1 (Ver que producto varía más en cada periodo del día)
@@ -329,7 +367,40 @@ def titulos_reportes(cuadro_1, cuadro2, cuadro3, cuadro4, cuadro5):
         if ganador != "empate":
             titulos2_2.append(f"El producto {i} es más barato en promedio en la {ganador}")
 
-    #titulo2_3 AUN NO HACER PORQUE NO ME SALE NADA
+    #titulo2_3 
+    productos ={}
+    for fila in cuadro2_3:
+        minimos = [fila[1][0], fila[1][1], fila[1][2]]
+        maximos = [fila[2][0], fila[2][1], fila[2][2]]
+        productos[fila[0]] = [minimos, maximos]
+
+    titulos2_3 = []
+    for i in productos:
+        listas = productos.get(i)
+        #minimos
+        if len(set(listas[0])) != 1:
+            minimo = np.nanmin(listas[0])
+            if minimo == listas[0][0]:
+                titulo2_3 = f"{i} registró sus precios más bajos durante la mañana"
+                titulos2_3.append(titulo2_3)
+            elif minimo == listas[0][1]:
+                titulo2_3 = f"{i} registró sus precios más bajos durante la tarde"
+                titulos2_3.append(titulo2_3)
+            elif minimo == listas[0][2]:
+                titulo2_3 = f"{i} registró sus precios más bajos durante la noche"
+                titulos2_3.append(titulo2_3)
+
+        if len(set(listas[1])) != 1:
+            maximo = np.nanmax(listas[1])
+            if maximo == listas[1][0]:
+                titulo2_3 = f"{i} registró sus precios más altos durante la mañana"
+                titulos2_3.append(titulo2_3)
+            elif maximo == listas[1][1]:
+                titulo2_3 = f"{i} registró sus precios más altos durante la tarde"
+                titulos2_3.append(titulo2_3)
+            elif maximo == listas[1][2]:
+                titulo2_3 = f"{i} registró sus precios más altos durante la noche"
+                titulos2_3.append(titulo2_3)
 
     #Titulo3 
     ganadores = []
@@ -358,7 +429,7 @@ def titulos_reportes(cuadro_1, cuadro2, cuadro3, cuadro4, cuadro5):
     mas_repetido = max(set(ganadores), key = ganadores.count)
     titulo5 = f"{mas_repetido} tuvo el menor precio promedio {ganadores.count(mas_repetido)} veces" 
 
-    return titulo1, titulo2_1, titulos2_2, titulo3, titulo4, titulo5
+    return titulo1, titulo1_1, titulo2_1, titulos2_2, titulos2_3, titulo3, titulo4, titulo5
 
 if __name__ == '__main__':
     app.run(debug=True)
