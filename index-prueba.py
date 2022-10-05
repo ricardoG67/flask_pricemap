@@ -445,6 +445,11 @@ def minimo_numpy(value):
 def maximo_numpy(value):
     return np.nanmax(value)
 
+@app.route("/pricemap_index")
+def pricemap_index():
+
+    return render_template("p_index.html")
+
 if __name__ == '__main__':
     app.run(debug=True)
 

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Pricemap</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <meta property="og:site_name" content="Pricemap">
+    <meta property="og:title" content="Observatorio de precios">
+    <meta property="og:image" content="../static/img/logo/pricemap_logo_v1.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:description"
+        content="Encuentra y compara el precio del mismo producto en diferentes puntos de venta.">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="manifest" href="site.webmanifest">
+
+    <link rel="shortcut icon" type="image/x-icon" href="../static/img/logo/favicon_pricemap.png">
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flaticon.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/slicknav.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome-all.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themify-icons.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/slick.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nice-select.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+
+    <!--CREADO RECIENTEMENTE-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashstyle.css')}}">
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="{{url_for('static', filename='js/dashscript.js')}}"></script>
+</head>
+<body>
+    <header>
+        <!-- Header Start -->
+        <div class="header-area header-transparrent">
+            <div class="main-header header-sticky">
+                <div class="container">
+                    <div class="row align-items-center" style="padding-top: 15px;">
+                        <!-- Logo -->
+                        <div class="col-xl-2 col-lg-2 col-md-2">
+                            <div class="logo">
+                                <a href="https://pricemap.neurometrics.la"><img src="../static/img/logo/pricemap_logo.png" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="col-xl-10 col-lg-10 col-md-10">
+                            <!-- Main-menu -->
+
+                            <!---->
+                            <div class="main-menu f-right d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation">
+
+                                        <li><a href="https://pixmap.io/" target="_blank">Pricemap index</a></li>
+                                        <li><a href="https://pixmap.io/" target="_blank">Reportes</a></li>
+                                        <li><a href="https://pixmap.io/" target="_blank">FAQs</a></li>
+                                        <li><a href="{{url_for('logout')}}">Cerrar sesión</a></li>
+
+                                        <!--
+                                        <li><a href="#">Users</a>
+                                            <ul class="submenu">
+                                                <li><a href="blog.html">Blog</a></li>
+                                                <li><a href="single-blog.html">Blog Details</a></li>
+                                                <li><a href="elements.html">Element</a></li>
+                                            </ul>
+                                        </li> 
+                                        -->
+
+                                    </ul>
+                                </nav>
+                            </div>
+
+                        </div>
+                        <!-- Mobile Menu -->
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Header End -->
+    </header>
+
+    <div class="sidebar">
+
+        <div id="myBtnContainer">
+            <button class="btn active" onclick="filterSelection('Arroz')">ARROZ</button>
+            <button class="btn" onclick="filterSelection('Atun')">ATUN</button>
+            <button class="btn" onclick="filterSelection('Azucar')">AZUCAR</button>
+            <button class="btn" onclick="filterSelection('Fideo')">FIDEO</button>
+            <button class="btn" onclick="filterSelection('Leche')">LECHE</button>
+            <button class="btn" onclick="filterSelection('Gaseosa')">GASEOSA</button>
+        </div>
+
+        <form action="/dashboard" method="post" class="form-dash">
+
+            <input type="radio" id="seven_days" name="days" value="7">
+            <label for="seven_days">Siete dias</label>
+
+            <input type="radio" id="fourteen_weeks" name="days" value="14">
+            <label for="fourteen_weeks">Catorce dias</label>
+
+            <input type="radio" id="one_month" name="days" value="30" required>
+            <label for="one_month">Treinta dias</label>
+
+            <input type="submit" class="boton-submit" value="Cambiar Fecha">
+
+        </form>
+    </div>
+
+    <main>
+        <div class="grid-layout">
+            
+        </div>
+    </main>
+</body>
+</html>
