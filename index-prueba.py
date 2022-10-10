@@ -10,7 +10,7 @@ import timeit
 
 app = Flask(__name__)
 
-cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
+#cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
 bcrypt = Bcrypt(app)
 
 # SESION
@@ -34,7 +34,7 @@ def faqs():
     Luego correr estadisticos
     '''
 
-    return render_template('faqs.html', fecha = fecha)
+    return render_template('faqs.html')
 
 def actualizar_fecha_login(email):
     #ESTE ES EL APPROACH MÁS SENCILLO  Y EL MEJOR 
@@ -447,8 +447,11 @@ def maximo_numpy(value):
 
 @app.route("/pricemap_index")
 def pricemap_index():
+    packs = ["Pack1"]
+    productos = ["./static/img/figuras_index/pack1.html"]
+    comentario = [["Coca cola 3L", "Ron Cartavio Selecto 750ml", "Evervess 1.5L", "Vodka Smirnoff 700ml", "Piqueo Snax 200g"]]
 
-    return render_template("p_index.html")
+    return render_template("p_index.html", productos=productos, packs=packs, comentario=comentario)
 
 if __name__ == '__main__':
     app.run(debug=True)

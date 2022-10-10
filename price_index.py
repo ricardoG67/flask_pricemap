@@ -13,34 +13,30 @@ import pandas as pd
 #CAMBIAR ENFOQUE PORQUE NO ESTÁ SALIENDO
 #
 #
-def create_fig(retailers, skus, title, price_evolution_data, time):   
-    ## create traces
-    fig = go.Figure()
-
-    #NUEVO
+def dia(days=0):
     est = timezone('EST')
-    now = datetime.datetime.now(est) - datetime.timedelta(days=int(time))
+    now = datetime.datetime.now(est) - datetime.timedelta(days)
     year = '{:02d}'.format(now.year)
     month = '{:02d}'.format(now.month)
     day = '{:02d}'.format(now.day)
     current_date = '{}-{}-{}'.format(year, month, day)
-    #####
+    return current_date
 
-    #Save prices
-    prices = []
+
+'''def create_fig(retailers, skus, title, price_evolution_data):   
+    ## create traces
+    fig = go.Figure()
+
     ## navigate for each retail and sku
     for retail, sku in zip(retailers, skus):
         ## select the sku and retail
-        query = price_evolution_data.loc[(price_evolution_data['sku'] == sku) & (price_evolution_data['retail'] == retail)]
+        query = price_evolution_data.loc[(price_evolution_data['sku'] == sku)]
 
         query = query.loc[query["date"]>=current_date]
         price = query["price"] ## get the price
         date = query["date"] ## get the date
         
         fig.add_trace(go.Scatter(x=date.values, y=price.values, name=retail))
-
-        prices.append(price.values)
-        #[prices.append(i) for i in price.values]
 
     fig.update_traces(mode='lines+markers')
     fig.update_layout(title={
@@ -50,7 +46,44 @@ def create_fig(retailers, skus, title, price_evolution_data, time):
                             'xanchor': 'center',
                             'yanchor': 'top'})
     
-    return fig, prices
+    return fig'''
+
+def create_fig(skus, title, price_evolution_index):   
+    ## create traces
+    fig = go.Figure()
+
+    ## navigate for each retail and sku
+    for sku in skus:
+        ## select the sku and retail
+        query = price_evolution_index.loc[(price_evolution_index['pack_sku'] == sku)]
+
+        query = query.loc[query["time"]>=dia(30)]
+        date = query["time"] ## get the date
+
+        price_wong = query["wong"] ## get the price
+        fig.add_trace(go.Scatter(x=date.values, y=price_wong.values, name="Wong"))
+
+        price_metro = query["metro"] ## get the price
+        fig.add_trace(go.Scatter(x=date.values, y=price_metro.values, name="Metro"))
+
+        price_pv = query["plaza vea"] ## get the price
+        fig.add_trace(go.Scatter(x=date.values, y=price_pv.values, name="Plaza Vea"))
+
+        price_vivanda = query["vivanda"] ## get the price
+        fig.add_trace(go.Scatter(x=date.values, y=price_vivanda.values, name="Vivanda"))
+
+        price_tottus = query["tottus"] ## get the price
+        fig.add_trace(go.Scatter(x=date.values, y=price_tottus.values, name="Tottus"))
+
+    fig.update_traces(mode='lines+markers')
+    fig.update_layout(title={
+                            'text': title,
+                            'y':0.9,
+                            'x':0.5,
+                            'xanchor': 'center',
+                            'yanchor': 'top'})
+
+    return fig
 
 #Pack Fiesta
     #en ese orden
@@ -104,49 +137,48 @@ Pack_8 = {"wong":[131712001, 348486, 428478, 526949, 194006, 15025], "metro":[13
 data = pd.read_csv("retail_data_final.csv")
 
 #recibe diccionario y bota los precios de los packs por tienda
+
+data = pd.read_csv("price_evolution.csv")
+current_date = dia()
+data_mensual = data.loc[data["date"]>=current_date] #No es mensual es diaria
+
 def precios_pack(pack):
-    pack_precios = []
+    lista_precios_pack_x_supermercado = []
     for supermercado in pack:
-
         precio_total_pack = 0
-        for productos in pack.get(supermercado):
-            fila = (data[(data["sku"] == str(productos)) & (data["retail"] == supermercado)].values)[0]
-            precio = pricemap.get_price_retail(str(fila[3]),str(supermercado),str(productos))
-            if precio is None:
-                print("HAHA")
 
-            print(fila, "\n", precio, "\n", precio_total_pack, "\n\n\n")
-            precio_total_pack += precio[1]
+        for producto in pack.get(supermercado):
+            precio_producto = (data_mensual[(data_mensual["sku"] == str(producto)) & (data_mensual["retail"] == supermercado)].values)[0][1]
+            
+            if np.isnan(precio_producto):
+                cuadro = data[(data["sku"] == str(producto)) & (data["date"]>=dia(7))]
+                cuadro.fillna(cuadro.mean().round(1), inplace=True)
+                precio_producto = (cuadro.values)[0][1]
+            
+            precio_total_pack+=precio_producto
         
-        pack_precios.append(precio_total_pack) #Se guarda wong, metro, pv, vivanda, tottus
-    
-    return pack_precios
+        lista_precios_pack_x_supermercado.append(np.round(precio_total_pack, 2))
+    return lista_precios_pack_x_supermercado
 
+
+########################################################################
+#PACK 1
 precios_pack_1 = precios_pack(Pack_1)
-precios_pack_1 = ['Fiesta', precios_pack_1]
+fila = pd.DataFrame([["Pack1",precios_pack_1[0],precios_pack_1[1],precios_pack_1[2],precios_pack_1[3],precios_pack_1[4],current_date]], columns=["pack_sku","wong", "metro", "plaza vea", "vivanda", "tottus", "time"])
 
-precios_pack_2 = precios_pack(Pack_2)
-precios_pack_2 = ['Lonchera colegio', precios_pack_2]
+###################
+#Guardado en csv
+data_index = pd.read_csv("price_evolution_index.csv")
+data_index_excel = pd.concat([data_index, fila], axis=0, ignore_index=True)
 
-#precios_pack_3 = precios_pack(Pack_3)
-precios_pack_4 = precios_pack(Pack_4)
-precios_pack_4 = ['Almuerzo barato', precios_pack_4]
+#data_index_excel.to_csv("price_evolution_index.csv", index=False)
+###################
 
-#precios_pack_5 = precios_pack(Pack_5)
-#precios_pack_6 = precios_pack(Pack_6)
-#precios_pack_7 = precios_pack(Pack_7)
-precios_pack_8 = precios_pack(Pack_8)
-precios_pack_8 = ['Campamento', precios_pack_8]
+#url = "/home/neurometricslab/flask_pricemap/static/img/figuras_index/" + "pack1" +".html"
+url = "./static/img/figuras_index/" + "pack1" +".html"
 
-precios = [precios_pack_1, precios_pack_2, precios_pack_4, precios_pack_8]
+fig = create_fig(["Pack1"], "Pack Fiesta", data_index)
+fig.write_html(url) 
 
-
-for precio in precios:
-            #sku, wong, metro, pv, vivanda, tottus
-    date, time = pricemap.get_time()
-    fila = [precio[0], precio[1][0],precio[1][1],precio[1][2],precio[1][3],precio[1][4], date, time]
-    df = pd.DataFrame(fila, columns=["sku", "Precio_wong", "Precio_Metro", "Precio_pv", "Precio_vivanda", "Precio_tottus", "date", "time"])
-    df.to_csv("price_evolution_index.csv", index=False)
-
-
-
+########################################################################
+#PACK 2

@@ -95,33 +95,27 @@
     <div class="sidebar">
 
         <div id="myBtnContainer">
-            <button class="btn active" onclick="filterSelection('Arroz')">ARROZ</button>
-            <button class="btn" onclick="filterSelection('Atun')">ATUN</button>
-            <button class="btn" onclick="filterSelection('Azucar')">AZUCAR</button>
-            <button class="btn" onclick="filterSelection('Fideo')">FIDEO</button>
-            <button class="btn" onclick="filterSelection('Leche')">LECHE</button>
-            <button class="btn" onclick="filterSelection('Gaseosa')">GASEOSA</button>
+            <button class="btn active" onclick="filterSelection('Pack1')">PACK FIESTA</button>
+            <button class="btn" onclick="filterSelection('Pack2')">PAQUETE PRUEBA</button>
         </div>
-
-        <form action="/dashboard" method="post" class="form-dash">
-
-            <input type="radio" id="seven_days" name="days" value="7">
-            <label for="seven_days">Siete dias</label>
-
-            <input type="radio" id="fourteen_weeks" name="days" value="14">
-            <label for="fourteen_weeks">Catorce dias</label>
-
-            <input type="radio" id="one_month" name="days" value="30" required>
-            <label for="one_month">Treinta dias</label>
-
-            <input type="submit" class="boton-submit" value="Cambiar Fecha">
-
-        </form>
     </div>
 
     <main>
         <div class="grid-layout">
-            
+            {% for i in range(0, productos|length) %}
+            <div class="filterDiv {{packs[i]}}">
+                <object data="{{ productos[i] }}" width="500px" height="400px"></object>
+                <div class="caja">
+                    <h6>Productos:</h6>
+                    <p>Los productos que han sido considerados para la construcción del pack son:</p>
+                    <ul>
+                    {%for producto in comentario[i]%}
+                        <li>{{producto}}</li>
+                    {%endfor%}
+                    </ul>
+                </div>
+            </div>
+            {%endfor%}
         </div>
     </main>
 </body>
