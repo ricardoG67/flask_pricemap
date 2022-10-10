@@ -23,31 +23,6 @@ def dia(days=0):
     return current_date
 
 
-'''def create_fig(retailers, skus, title, price_evolution_data):   
-    ## create traces
-    fig = go.Figure()
-
-    ## navigate for each retail and sku
-    for retail, sku in zip(retailers, skus):
-        ## select the sku and retail
-        query = price_evolution_data.loc[(price_evolution_data['sku'] == sku)]
-
-        query = query.loc[query["date"]>=current_date]
-        price = query["price"] ## get the price
-        date = query["date"] ## get the date
-        
-        fig.add_trace(go.Scatter(x=date.values, y=price.values, name=retail))
-
-    fig.update_traces(mode='lines+markers')
-    fig.update_layout(title={
-                            'text': title,
-                            'y':0.9,
-                            'x':0.5,
-                            'xanchor': 'center',
-                            'yanchor': 'top'})
-    
-    return fig'''
-
 def create_fig(skus, title, price_evolution_index):   
     ## create traces
     fig = go.Figure()
@@ -118,16 +93,17 @@ Pack_2 = {"wong":[718596001, 428478, 526949, 194006, 15025, 95540002], "metro":[
 86473], "vivanda":[20144006, 20046056, 20220539, 20047414, 831215, 86473], "tottus":
 [41738590, 40641500, 42372433, 40865181, 10165832, 40928204]}
 
-#Pack_3 = {}
+#Pack_3 = {"wong":[], "metro":[], "plaza_vea":[], "vivanda":[], "tottus":[]}
 
 Pack_4 = {"wong":[45190, 960487, 171247], "metro":[45190, 960487, 171247], "plaza_vea":[21186,
 20257683, 931740], "vivanda":[21186, 20257683,931740], "tottus":[10174382, 42699556, 20092463]}
 
-#Pack_5 = {}
+#Pack_5 = {"wong":[], "metro":[], "plaza_vea":[], "vivanda":[], "tottus":[]}
 
-#Pack_6 = {}
+#Pack_6 = {"wong":[], "metro":[], "plaza_vea":[], "vivanda":[], "tottus":[]}
 
-#Pack_7 = {}
+#Pack_7 = {"wong":[942480, 45035, 757207], "metro":[942480, 45035, 757207], "plaza_vea":[20253490, 21130,20179461], 
+# "vivanda":[20253490, 21130,20179461], "tottus":[42522653, 10164192, 41899197]}
 
 Pack_8 = {"wong":[131712001, 348486, 428478, 526949, 194006, 15025], "metro":[131712001, 
 348486, 428478, 526949, 194006, 15025], "plaza_vea":[1089881001, 502139, 20046056, 
@@ -182,3 +158,7 @@ fig.write_html(url)
 
 ########################################################################
 #PACK 2
+
+precios_pack_2 = precios_pack(Pack_4)
+fila = pd.DataFrame([["Pack1",precios_pack_2[0],precios_pack_2[1],precios_pack_2[2],precios_pack_2[3],precios_pack_2[4],current_date]], columns=["pack_sku","wong", "metro", "plaza vea", "vivanda", "tottus", "time"])
+print(fila)

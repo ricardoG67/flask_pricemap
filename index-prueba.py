@@ -447,8 +447,10 @@ def maximo_numpy(value):
 
 @app.route("/pricemap_index")
 def pricemap_index():
+    #Para agregar productos se debe agregar los datos aca y en price_index
     packs = ["Pack1"]
     productos = ["./static/img/figuras_index/pack1.html"]
+    #Comentario es la lista de los productos con los que está conformado el pack 
     comentario = [["Coca cola 3L", "Ron Cartavio Selecto 750ml", "Evervess 1.5L", "Vodka Smirnoff 700ml", "Piqueo Snax 200g"]]
 
     return render_template("p_index.html", productos=productos, packs=packs, comentario=comentario)
