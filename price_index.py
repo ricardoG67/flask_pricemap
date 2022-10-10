@@ -8,7 +8,11 @@ import pandas as pd
 #Para usar pricemap necesitas uri, retail, sku
 #pricemap.get_price_retail(uri, retail, sku)
 
-
+#
+#
+#CAMBIAR ENFOQUE PORQUE NO ESTÁ SALIENDO
+#
+#
 def create_fig(retailers, skus, title, price_evolution_data, time):   
     ## create traces
     fig = go.Figure()
@@ -107,8 +111,11 @@ def precios_pack(pack):
         precio_total_pack = 0
         for productos in pack.get(supermercado):
             fila = (data[(data["sku"] == str(productos)) & (data["retail"] == supermercado)].values)[0]
-
             precio = pricemap.get_price_retail(str(fila[3]),str(supermercado),str(productos))
+            if precio is None:
+                print("HAHA")
+
+            print(fila, "\n", precio, "\n", precio_total_pack, "\n\n\n")
             precio_total_pack += precio[1]
         
         pack_precios.append(precio_total_pack) #Se guarda wong, metro, pv, vivanda, tottus
@@ -116,13 +123,30 @@ def precios_pack(pack):
     return pack_precios
 
 precios_pack_1 = precios_pack(Pack_1)
+precios_pack_1 = ['Fiesta', precios_pack_1]
+
 precios_pack_2 = precios_pack(Pack_2)
+precios_pack_2 = ['Lonchera colegio', precios_pack_2]
+
 #precios_pack_3 = precios_pack(Pack_3)
 precios_pack_4 = precios_pack(Pack_4)
+precios_pack_4 = ['Almuerzo barato', precios_pack_4]
+
 #precios_pack_5 = precios_pack(Pack_5)
 #precios_pack_6 = precios_pack(Pack_6)
 #precios_pack_7 = precios_pack(Pack_7)
 precios_pack_8 = precios_pack(Pack_8)
+precios_pack_8 = ['Campamento', precios_pack_8]
+
+precios = [precios_pack_1, precios_pack_2, precios_pack_4, precios_pack_8]
+
+
+for precio in precios:
+            #sku, wong, metro, pv, vivanda, tottus
+    date, time = pricemap.get_time()
+    fila = [precio[0], precio[1][0],precio[1][1],precio[1][2],precio[1][3],precio[1][4], date, time]
+    df = pd.DataFrame(fila, columns=["sku", "Precio_wong", "Precio_Metro", "Precio_pv", "Precio_vivanda", "Precio_tottus", "date", "time"])
+    df.to_csv("price_evolution_index.csv", index=False)
 
 
 

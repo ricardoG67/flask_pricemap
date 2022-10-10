@@ -10,7 +10,7 @@ import timeit
 
 app = Flask(__name__)
 
-#cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
+cnx = mysql.connector.connect(host='localhost', user='root', password='', database='pricemap')
 bcrypt = Bcrypt(app)
 
 # SESION
