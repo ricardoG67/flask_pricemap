@@ -95,15 +95,15 @@ Pack_2 = {"wong":[718596001, 428478, 526949, 194006, 15025, 95540002], "metro":[
 
 #Pack_3 = {"wong":[], "metro":[], "plaza_vea":[], "vivanda":[], "tottus":[]}
 
-Pack_4 = {"wong":[45190, 960487, 171247], "metro":[45190, 960487, 171247], "plaza_vea":[21186,
-20257683, 931740], "vivanda":[21186, 20257683,931740], "tottus":[10174382, 42699556, 20092463]}
+Pack_4 = {"wong":[45190, 294661, 171247], "metro":[45190, 294661, 171247], "plaza_vea":[21186,
+20280294, 931740], "vivanda":[21186, 20280294,931740], "tottus":[10174382, 42747310, 20092463]}
 
 #Pack_5 = {"wong":[], "metro":[], "plaza_vea":[], "vivanda":[], "tottus":[]}
 
 #Pack_6 = {"wong":[], "metro":[], "plaza_vea":[], "vivanda":[], "tottus":[]}
 
-#Pack_7 = {"wong":[942480, 45035, 757207], "metro":[942480, 45035, 757207], "plaza_vea":[20253490, 21130,20179461], 
-# "vivanda":[20253490, 21130,20179461], "tottus":[42522653, 10164192, 41899197]}
+Pack_7 = {"wong":[942480, 45035, 757207], "metro":[942480, 45035, 757207], "plaza_vea":[20253490, 21130,20179461], 
+"vivanda":[20253490, 21130,20179461], "tottus":[42522653, 10164192, 41899197]}
 
 Pack_8 = {"wong":[131712001, 348486, 428478, 526949, 194006, 15025], "metro":[131712001, 
 348486, 428478, 526949, 194006, 15025], "plaza_vea":[1089881001, 502139, 20046056, 
@@ -114,6 +114,7 @@ data = pd.read_csv("retail_data_final.csv")
 
 #recibe diccionario y bota los precios de los packs por tienda
 
+#Se cambia eso
 data = pd.read_csv("price_evolution.csv")
 current_date = dia()
 data_mensual = data.loc[data["date"]>=current_date] #No es mensual es diaria
@@ -137,28 +138,59 @@ def precios_pack(pack):
     return lista_precios_pack_x_supermercado
 
 
+data_index = pd.read_csv("price_evolution_index.csv")
+
+def pasar_a_csv(precios_p, sku):
+    fila = pd.DataFrame([[str(sku),precios_p[0],precios_p[1],precios_p[2],precios_p[3],precios_p[4],current_date]], columns=["pack_sku","wong", "metro", "plaza vea", "vivanda", "tottus", "time"])
+
+    fig = create_fig([str(sku)], "Fiesta", data_index)
+
+    #url = "/home/neurometricslab/flask_pricemap/static/img/figuras_index/" + "pack1" +".html"
+    url = "./static/img/figuras_index/" + str(sku) +".html"
+
+    fig.write_html(url)
+
+    return fila
+
 ########################################################################
 #PACK 1
 precios_pack_1 = precios_pack(Pack_1)
-fila = pd.DataFrame([["Pack1",precios_pack_1[0],precios_pack_1[1],precios_pack_1[2],precios_pack_1[3],precios_pack_1[4],current_date]], columns=["pack_sku","wong", "metro", "plaza vea", "vivanda", "tottus", "time"])
+
+'''fila1 = pd.DataFrame([["Pack1",precios_pack_1[0],precios_pack_1[1],precios_pack_1[2],precios_pack_1[3],precios_pack_1[4],current_date]], columns=["pack_sku","wong", "metro", "plaza vea", "vivanda", "tottus", "time"])
 
 ###################
-#Guardado en csv
-data_index = pd.read_csv("price_evolution_index.csv")
-data_index_excel = pd.concat([data_index, fila], axis=0, ignore_index=True)
 
-#data_index_excel.to_csv("price_evolution_index.csv", index=False)
-###################
+fig = create_fig(["Pack1"], "Fiesta", data_index)
 
 #url = "/home/neurometricslab/flask_pricemap/static/img/figuras_index/" + "pack1" +".html"
 url = "./static/img/figuras_index/" + "pack1" +".html"
 
-fig = create_fig(["Pack1"], "Pack Fiesta", data_index)
-fig.write_html(url) 
+fig.write_html(url) '''
 
+fila1 = pasar_a_csv(precios_pack_1, "Pack1")
 ########################################################################
 #PACK 2
+precios_pack_2 = precios_pack(Pack_2)
+fila2 = pasar_a_csv(precios_pack_2, "Pack2")
 
-precios_pack_2 = precios_pack(Pack_4)
-fila = pd.DataFrame([["Pack1",precios_pack_2[0],precios_pack_2[1],precios_pack_2[2],precios_pack_2[3],precios_pack_2[4],current_date]], columns=["pack_sku","wong", "metro", "plaza vea", "vivanda", "tottus", "time"])
-print(fila)
+########################################################################
+#PACK 4
+precios_pack_4 = precios_pack(Pack_4)
+fila4 = pasar_a_csv(precios_pack_4, "Pack4")
+
+########################################################################
+#PACK 7
+precios_pack_7 = precios_pack(Pack_7)
+fila7 = pasar_a_csv(precios_pack_7, "Pack7")
+
+########################################################################
+#PACK 8
+precios_pack_8 = precios_pack(Pack_8)
+fila8 = pasar_a_csv(precios_pack_8, "Pack8")
+
+########################################################################
+
+#Guardado en csv
+data_index_excel = pd.concat([data_index, fila1, fila2, fila4, fila7, fila8], axis=0, ignore_index=True)
+
+#data_index_excel.to_csv("price_evolution_index.csv", index=False)

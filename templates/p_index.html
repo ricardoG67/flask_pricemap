@@ -96,21 +96,25 @@
 
         <div id="myBtnContainer">
             <button class="btn active" onclick="filterSelection('Pack1')">PACK FIESTA</button>
-            <button class="btn" onclick="filterSelection('Pack2')">PAQUETE PRUEBA</button>
+            <button class="btn" onclick="filterSelection('Pack2')">PACK PRUEBA</button>
         </div>
     </div>
 
     <main>
+        <div class="titulos">
+            <h3></h3>
+            <h3></h3>
+        </div>
         <div class="grid-layout">
             {% for i in range(0, productos|length) %}
             <div class="filterDiv {{packs[i]}}">
                 <object data="{{ productos[i] }}" width="500px" height="400px"></object>
                 <div class="caja">
-                    <h6>Productos:</h6>
-                    <p>Los productos que han sido considerados para la construcción del pack son:</p>
+                    <h4>Productos:</h4>
+                    <p style="color:#212529;">Los productos que han sido considerados para la construcción del pack son:</p>
                     <ul>
                     {%for producto in comentario[i]%}
-                        <li>{{producto}}</li>
+                        <li style="list-style:inside">{{producto}}</li>
                     {%endfor%}
                     </ul>
                 </div>
